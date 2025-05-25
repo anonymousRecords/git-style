@@ -21,10 +21,10 @@ Turn your GitHub contributions into a personalized SVG badge — hairlines, flam
 ```
 
 ## 🎨 Themes
-	•	💇 Hair
-	•	🔥 Fire
-	•	🌱 Plant (coming soon)
-	•	😎 Emoji (coming soon)
+	• 💇 Hair
+	• 🔥 Fire
+	• 🌱 Plant (coming soon)
+	• 😎 Emoji (coming soon)
 
 ## 📦 Setup
 ```
