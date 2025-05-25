@@ -14,7 +14,7 @@ export default function PreviewCard({
     theme = "hair",
 }: PreviewCardProps) {
     const svgUrl = `/api/${username}?theme=${theme}`;
-	const markdown = `![GitStyle](${svgUrl})`;
+	const markdown = `![GitStyle](https://git-style.vercel.app/${svgUrl})`;
 
 	const [copied, setCopied] = useState<boolean>(false);
 
