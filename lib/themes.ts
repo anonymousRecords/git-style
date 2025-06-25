@@ -97,13 +97,6 @@ export const PlantTheme: ThemeStyle = {
 				return null;
 		}
 	},
-	colorMap: {
-		none: "#f0fdf4",
-		low: "#bbf7d0",
-		medium: "#86efac",
-		high: "#4ade80",
-		max: "#f472b6",
-	},
 };
 
 export const themes: Record<string, ThemeStyle> = {

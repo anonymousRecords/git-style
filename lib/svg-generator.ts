@@ -48,15 +48,12 @@ export async function generateThemedSVG(username: string, themeKey: string) {
 	);
 
 	const defs = backgroundPattern
-  		? `<defs>${backgroundPattern.replace(
-      		/<pattern([^>]*)>/,
-      		`<pattern id="${patternId}"$1>`
-    		)}</defs>`
+		? `<defs>${backgroundPattern.replace(
+			/<pattern([^>]*?)>/g,
+			`<pattern id="${patternId}"$1>`
+			)}</defs>`
   		: "";
-
 	const fillValue = backgroundPattern ? `url(#${patternId})` : background;
-	console.log("defs:", defs);
-	console.log("fillValue:", fillValue);
 
 	const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${weeks.length * cellSize + 40}" height="180">
