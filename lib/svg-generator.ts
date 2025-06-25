@@ -10,6 +10,9 @@ export async function generateThemedSVG(username: string, themeKey: string) {
 	const cellSize = 14;
 
 	const background = theme.background || "#ffffff";
+	const backgroundPattern = theme.backgroundPattern;
+	const patternId = `pattern_${themeKey}`;
+
 	const baseDot = theme.showBaseDot ?? false;
 
 	const elements = weeks.flatMap((week, weekIndex) =>
@@ -44,9 +47,21 @@ export async function generateThemedSVG(username: string, themeKey: string) {
 		}),
 	);
 
+	const defs = backgroundPattern
+  		? `<defs>${backgroundPattern.replace(
+      		/<pattern([^>]*)>/,
+      		`<pattern id="${patternId}"$1>`
+    		)}</defs>`
+  		: "";
+
+	const fillValue = backgroundPattern ? `url(#${patternId})` : background;
+	console.log("defs:", defs);
+	console.log("fillValue:", fillValue);
+
 	const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${weeks.length * cellSize + 40}" height="180">
-      <rect width="100%" height="100%" fill="${background}" />
+	  ${defs}
+      <rect width="100%" height="100%" fill="${fillValue}" />
       <text x="20" y="30" font-size="16" fill="#333">${theme.emoji || ""} ${username}'s ${theme.label}</text>
       ${elements.join("\n")}
     </svg>

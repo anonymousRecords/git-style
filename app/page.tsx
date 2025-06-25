@@ -60,4 +60,4 @@ export default function Home() {
 	);
 }
 
-const TAGS = [{ label: "hair" }, { label: "fire" }];
+const TAGS = [{ label: "hair" }, { label: "fire" }, { label: "plant" }];
