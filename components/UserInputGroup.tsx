@@ -1,5 +1,5 @@
-import Input from "./common/input";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import Input from "./common/input";
 
 interface UserInputGroupProps {
 	username: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import { FilterBar } from "@/components/FilterBar";
-import PreviewCard from "@/components/preview-card";
+import PreviewCard from "@/components/PreviewCard";
 import { UserInputGroup } from "@/components/UserInputGroup";
 import { useState } from "react";
 
