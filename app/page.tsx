@@ -1,9 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { FilterBar } from "@/components/FilterBar";
 import PreviewCard from "@/components/PreviewCard";
 import { UserInputGroup } from "@/components/UserInputGroup";
-import { useState } from "react";
 
 export default function Home() {
 	const [theme, setTheme] = useState("plant");
@@ -27,9 +27,7 @@ export default function Home() {
 				/>
 			</div>
 
-			{submitted && (
-				<PreviewCard username={username} />
-			)}
+			{submitted && <PreviewCard username={username} />}
 		</div>
 	);
 }

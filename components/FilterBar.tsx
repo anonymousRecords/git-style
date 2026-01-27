@@ -1,7 +1,7 @@
-import Chip from "./common/chip";
+import Chip from "./common/Chip";
 
 type Tag = {
-	label: "plant";
+	label: "plant" | 'hair';
 };
 
 const TAGS: Tag[] = [{ label: "plant" }];
