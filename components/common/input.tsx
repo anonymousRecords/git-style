@@ -1,5 +1,7 @@
 "use client";
 
+import { useId } from "react";
+
 interface InputProps {
 	type?: "text" | "email" | "password";
 	placeholder?: string;
@@ -23,11 +25,14 @@ export default function Input({
 	className = "",
 	error,
 }: InputProps) {
+	const id = useId();
+	const inputId = `${name}-${id}`;
+
 	return (
 		<div className="mb-4">
 			{label && (
 				<label
-					htmlFor={name}
+					htmlFor={inputId}
 					className="block text-sm font-medium text-black mb-1"
 				>
 					{label}
@@ -36,7 +41,7 @@ export default function Input({
 			<input
 				type={type}
 				name={name}
-				id={`${name}-${Math.random().toString(36)}`}
+				id={inputId}
 				placeholder={placeholder}
 				value={value}
 				onChange={onChange}
