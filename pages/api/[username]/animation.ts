@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { AnimationConfig } from "@/lib/animation/types";
 import { generatePlantAPNG } from "@/lib/theme/generator/generate-plant-apng";
 
 export const config = {
