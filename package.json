@@ -11,7 +11,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@napi-rs/canvas": "^0.1.88",
-    "next": "15.3.2",
+    "next": "16.1.5",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
