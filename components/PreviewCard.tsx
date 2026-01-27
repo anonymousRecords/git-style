@@ -34,6 +34,7 @@ export default function PreviewCard({
 					className="w-full h-auto"
 					width={500}
 					height={500}
+					unoptimized
 				/>
 			</div>
 
