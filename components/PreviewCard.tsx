@@ -1,20 +1,18 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 interface PreviewCardProps {
 	username: string;
-	loading?: boolean;
-    theme?: string;
 }
 
 export default function PreviewCard({
 	username,
-	loading = false,
-    theme = "hair",
 }: PreviewCardProps) {
-    const svgUrl = `/api/${username}?theme=${theme}`;
-	const markdown = `![GitStyle](https://git-style.vercel.app${svgUrl})`;
+	const animationUrl = `/api/${username}/animation?theme=plant&quality=low`;
+
+	const markdown = `![GitStyle](https://git-style.vercel.app${animationUrl})`;
 
 	const [copied, setCopied] = useState<boolean>(false);
 
@@ -28,21 +26,15 @@ export default function PreviewCard({
 
 	return (
 		<div className="mt-6 space-y-4">
-			{/* SVG Preview */}
+			{/* Preview */}
 			<div className="overflow-hidden p-2">
-				{loading ? (
-					<p className="text-center text-sm text-gray-400">
-						Loading preview...
-					</p>
-				) : (
-					<>
-						<img
-							src={svgUrl}
-							alt={`${username}'s GitStyle`}
-							className="w-full h-auto"
-						/>
-					</>
-				)}
+				<Image
+					src={animationUrl}
+					alt={`${username}'s GitStyle`}
+					className="w-full h-auto"
+					width={500}
+					height={500}
+				/>
 			</div>
 
 			{/* Markdown code block */}
