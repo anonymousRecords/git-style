@@ -2,7 +2,7 @@ import { createCanvas } from "@napi-rs/canvas";
 import { chunkIntoWeeks, fetchContributions } from "@/lib/github";
 import { getCommitLevel } from "@/lib/themes";
 import { type APNGFrame, encodeAPNG } from "../../animation/apng-encoder";
-import type { AnimationConfig, WindEffect } from "../../animation/types";
+import type { AnimationConfig, FlowerType, WindEffect } from "../../animation/types";
 import { QUALITY_PRESETS } from "../../animation/types";
 import {
 	createPlantElements,
@@ -13,11 +13,31 @@ import {
 const cache = new Map<string, { data: Uint8Array; timestamp: number }>();
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
+interface GeneratePlantAPNGOptions {
+	username: string;
+	quality?: AnimationConfig["quality"];
+	flowerType?: FlowerType;
+	flowerColor?: string;
+}
+
 export async function generatePlantAPNG(
-	username: string,
+	options: GeneratePlantAPNGOptions | string,
 	quality: AnimationConfig["quality"] = "low",
 ): Promise<Uint8Array> {
-	const cacheKey = `${username}-${quality}`;
+	// Support both old signature (username, quality) and new options object
+	const opts: GeneratePlantAPNGOptions =
+		typeof options === "string"
+			? { username: options, quality }
+			: options;
+
+	const {
+		username,
+		quality: q = "low",
+		flowerType = "default",
+		flowerColor,
+	} = opts;
+
+	const cacheKey = `${username}-${q}-${flowerType}-${flowerColor || "default"}`;
 
 	const cached = cache.get(cacheKey);
 
@@ -26,7 +46,7 @@ export async function generatePlantAPNG(
 	}
 
 	const frames: APNGFrame[] = [];
-	const { frameCount, frameDelay } = QUALITY_PRESETS[quality];
+	const { frameCount, frameDelay } = QUALITY_PRESETS[q];
 
 	const weeks = chunkIntoWeeks(await fetchContributions(username));
 	const { width, height } = getCanvasDimensions(weeks.length);
@@ -43,6 +63,8 @@ export async function generatePlantAPNG(
 			totalFrames: frameCount,
 			windEffect: getWindEffect(width),
 			username,
+			flowerType,
+			flowerColor,
 		});
 
 		const pngBuffer = canvas.toBuffer("image/png");

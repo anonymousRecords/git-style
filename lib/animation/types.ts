@@ -1,5 +1,7 @@
 import type { CommitLevel } from "@/lib/themes";
 
+export type FlowerType = "default" | "tulip" | "sunflower" | "cherry";
+
 export interface AnimationConfig {
 	frameCount: number;
 	frameDelay: number; // milliseconds

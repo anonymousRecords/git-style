@@ -1,6 +1,10 @@
 import type { Canvas, SKRSContext2D } from "@napi-rs/canvas";
 import type { CommitLevel } from "@/lib/themes";
-import type { PlantElement, WindEffect } from "../../animation/types";
+import type {
+	FlowerType,
+	PlantElement,
+	WindEffect,
+} from "../../animation/types";
 import { PLANT_COLORS } from "../../animation/types";
 
 const CELL_SIZE = 14;
@@ -37,6 +41,8 @@ interface renderPlantFrameProps {
 	totalFrames: number;
 	windEffect: WindEffect;
 	username: string;
+	flowerType?: FlowerType;
+	flowerColor?: string;
 }
 
 export function renderPlantFrame({
@@ -47,6 +53,8 @@ export function renderPlantFrame({
 	totalFrames,
 	windEffect,
 	username,
+	flowerType = "default",
+	flowerColor,
 }: renderPlantFrameProps): void {
 	const width = canvas.width;
 	const height = canvas.height;
@@ -56,7 +64,7 @@ export function renderPlantFrame({
 	// Title
 	ctx.fillStyle = "#ffffff";
 	ctx.font = "16px sans-serif";
-	ctx.fillText(`🌿 ${username}'s Plant`, OFFSET_X, 30);
+	ctx.fillText(`${username}'s Plant`, OFFSET_X, 30);
 
 	// Animation progress (0 ~ 1)
 	const progress = frameIndex / totalFrames;
@@ -76,7 +84,15 @@ export function renderPlantFrame({
 			Math.sin((progress + phaseOffset) * Math.PI * 2 * windEffect.frequency) *
 			windEffect.amplitude;
 
-		drawPlant(ctx, element.x, element.y, element.level, windAngle);
+		drawPlant(
+			ctx,
+			element.x,
+			element.y,
+			element.level,
+			windAngle,
+			flowerType,
+			flowerColor,
+		);
 	});
 }
 
@@ -155,6 +171,8 @@ function drawPlant(
 	y: number,
 	level: CommitLevel,
 	windAngle: number,
+	flowerType: FlowerType = "default",
+	flowerColor?: string,
 ): void {
 	ctx.save();
 	ctx.translate(x, y);
@@ -173,7 +191,7 @@ function drawPlant(
 			drawGrass(ctx, radians);
 			break;
 		case "max":
-			drawFlower(ctx, radians);
+			drawFlower(ctx, radians, flowerType, flowerColor);
 			break;
 	}
 
@@ -252,7 +270,12 @@ function drawGrass(ctx: SKRSContext2D, windRadians: number): void {
 }
 
 // Level: max - grass with flower
-function drawFlower(ctx: SKRSContext2D, windRadians: number): void {
+function drawFlower(
+	ctx: SKRSContext2D,
+	windRadians: number,
+	flowerType: FlowerType = "default",
+	flowerColor?: string,
+): void {
 	// Draw grass base first
 	const stems = [
 		{ angle: -0.4, height: 10, curve: -2 },
@@ -289,13 +312,32 @@ function drawFlower(ctx: SKRSContext2D, windRadians: number): void {
 		ctx.restore();
 	});
 
-	// Draw flower
 	ctx.save();
 	ctx.translate(flowerPos.x, flowerPos.y);
 	ctx.rotate(windRadians * 0.5);
 
-	// Flower petals
-	ctx.fillStyle = PLANT_COLORS.flower;
+	switch (flowerType) {
+		case "tulip":
+			drawTulipHead(ctx, flowerColor);
+			break;
+		case "sunflower":
+			drawSunflowerHead(ctx, flowerColor);
+			break;
+		case "cherry":
+			drawCherryBlossomHead(ctx, flowerColor);
+			break;
+		default:
+			drawDefaultFlowerHead(ctx, flowerColor);
+			break;
+	}
+
+	ctx.restore();
+}
+
+// Default flower
+function drawDefaultFlowerHead(ctx: SKRSContext2D, color?: string): void {
+	const petalColor = color || PLANT_COLORS.flower;
+	ctx.fillStyle = petalColor;
 	const petalCount = 5;
 	const petalRadius = 3;
 
@@ -309,13 +351,134 @@ function drawFlower(ctx: SKRSContext2D, windRadians: number): void {
 		ctx.fill();
 	}
 
-	// Flower center
-	ctx.fillStyle = "#f59e0b"; // amber-500
+	ctx.fillStyle = "#f59e0b";
 	ctx.beginPath();
 	ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
 	ctx.fill();
+}
 
-	ctx.restore();
+// Tulip
+function drawTulipHead(ctx: SKRSContext2D, color?: string): void {
+	const petalColor = color || "#f43f5e";
+
+	ctx.fillStyle = petalColor;
+
+	// Left
+	ctx.beginPath();
+	ctx.moveTo(0, 2);
+	ctx.quadraticCurveTo(-6, -2, -4, -8);
+	ctx.quadraticCurveTo(-2, -10, 0, -8);
+	ctx.fill();
+
+	// Right
+	ctx.beginPath();
+	ctx.moveTo(0, 2);
+	ctx.quadraticCurveTo(6, -2, 4, -8);
+	ctx.quadraticCurveTo(2, -10, 0, -8);
+	ctx.fill();
+
+	// Center
+	ctx.fillStyle = adjustBrightness(petalColor, -20);
+	ctx.beginPath();
+	ctx.moveTo(0, 2);
+	ctx.quadraticCurveTo(-3, -3, -2, -9);
+	ctx.quadraticCurveTo(0, -11, 2, -9);
+	ctx.quadraticCurveTo(3, -3, 0, 2);
+	ctx.fill();
+}
+
+// Sunflower
+function drawSunflowerHead(ctx: SKRSContext2D, color?: string): void {
+	const petalColor = color || "#facc15";
+	const petalCount = 12;
+	const petalLength = 5;
+	const petalWidth = 2;
+
+	ctx.fillStyle = petalColor;
+	for (let i = 0; i < petalCount; i++) {
+		const angle = (i / petalCount) * Math.PI * 2;
+		ctx.save();
+		ctx.rotate(angle);
+
+		ctx.beginPath();
+		ctx.ellipse(0, -5, petalWidth, petalLength, 0, 0, Math.PI * 2);
+		ctx.fill();
+
+		ctx.restore();
+	}
+
+	ctx.fillStyle = "#92400e";
+	ctx.beginPath();
+	ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+	ctx.fill();
+
+	ctx.fillStyle = "#78350f";
+	for (let i = 0; i < 5; i++) {
+		const dotAngle = (i / 5) * Math.PI * 2;
+		const dotX = Math.cos(dotAngle) * 1.5;
+		const dotY = Math.sin(dotAngle) * 1.5;
+		ctx.beginPath();
+		ctx.arc(dotX, dotY, 0.5, 0, Math.PI * 2);
+		ctx.fill();
+	}
+}
+
+// Cherry blossom
+function drawCherryBlossomHead(ctx: SKRSContext2D, color?: string): void {
+	const petalColor = color || "#fbcfe8";
+	const petalCount = 5;
+
+	ctx.fillStyle = petalColor;
+
+	for (let i = 0; i < petalCount; i++) {
+		const angle = (i / petalCount) * Math.PI * 2 - Math.PI / 2;
+		ctx.save();
+		ctx.rotate(angle);
+
+		ctx.beginPath();
+		ctx.moveTo(0, 0);
+		ctx.quadraticCurveTo(-3, -3, -2, -6);
+		ctx.quadraticCurveTo(-1, -7, 0, -5.5);
+		ctx.quadraticCurveTo(1, -7, 2, -6);
+		ctx.quadraticCurveTo(3, -3, 0, 0);
+		ctx.fill();
+
+		ctx.restore();
+	}
+
+	ctx.fillStyle = "#f9a8d4";
+	ctx.beginPath();
+	ctx.arc(0, 0, 1.5, 0, Math.PI * 2);
+	ctx.fill();
+
+	ctx.strokeStyle = "#fbbf24";
+	ctx.lineWidth = 0.5;
+	for (let i = 0; i < 5; i++) {
+		const sAngle = (i / 5) * Math.PI * 2;
+		ctx.beginPath();
+		ctx.moveTo(0, 0);
+		ctx.lineTo(Math.cos(sAngle) * 2, Math.sin(sAngle) * 2);
+		ctx.stroke();
+
+		ctx.fillStyle = "#fbbf24";
+		ctx.beginPath();
+		ctx.arc(
+			Math.cos(sAngle) * 2.2,
+			Math.sin(sAngle) * 2.2,
+			0.4,
+			0,
+			Math.PI * 2,
+		);
+		ctx.fill();
+	}
+}
+
+function adjustBrightness(hex: string, percent: number): string {
+	const num = Number.parseInt(hex.replace("#", ""), 16);
+	const r = Math.min(255, Math.max(0, (num >> 16) + percent));
+	const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + percent));
+	const b = Math.min(255, Math.max(0, (num & 0x0000ff) + percent));
+	return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 }
 
 export function getCanvasDimensions(weeksCount: number): {

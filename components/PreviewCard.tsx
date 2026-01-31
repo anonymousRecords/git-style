@@ -2,15 +2,21 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import type { FlowerType } from "@/lib/animation/types";
 
 interface PreviewCardProps {
 	username: string;
+	flowerType?: FlowerType;
+	flowerColor?: string;
 }
 
 export default function PreviewCard({
 	username,
+	flowerType = "default",
+	flowerColor,
 }: PreviewCardProps) {
-	const animationUrl = `/api/${username}/animation?theme=plant&quality=low`;
+	const colorParam = flowerColor ? `&color=${encodeURIComponent(flowerColor)}` : "";
+	const animationUrl = `/api/${username}/animation?theme=plant&quality=low&flower=${flowerType}${colorParam}`;
 
 	const markdown = `![GitStyle](https://git-style.vercel.app${animationUrl})`;
 

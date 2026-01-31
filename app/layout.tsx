@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
+import { Coiny, Quicksand } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/common/Header";
+
+const quicksand = Quicksand({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-quicksand",
+});
+
+const coiny = Coiny({
+	subsets: ["latin"],
+	weight: "400",
+	variable: "--font-coiny",
+});
 
 export const metadata: Metadata = {
 	title: "Git Style - Your commits, your style",
@@ -15,10 +28,12 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className="flex justify-center bg-gray-100">
+			<body
+				className={`flex justify-center bg-gray-100 ${quicksand.variable} ${coiny.variable}`}
+			>
 				<div className="w-full max-w-[600px] min-h-screen bg-white shadow-md relative">
 					<Header />
-					{children}
+					<div className="flex-1">{children}</div>
 				</div>
 			</body>
 		</html>
