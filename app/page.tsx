@@ -1,49 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { FlowerSelector } from "@/components/FlowerSelector";
-import PreviewCard from "@/components/PreviewCard";
-import { UserInputGroup } from "@/components/UserInputGroup";
-import type { FlowerType } from "@/lib/animation/types";
+import { type Theme, ThemeSelect } from "@/components/ThemeTabs";
+import { ThemeContent } from "@/components/theme-content";
 
 export default function Home() {
-	const [username, setUsername] = useState("");
-	const [submitted, setSubmitted] = useState(false);
-	const [flowerType, setFlowerType] = useState<FlowerType>("default");
-	const [flowerColor, setFlowerColor] = useState("#fbbf24");
-
-	const handleSubmit = () => {
-		if (!username) return;
-		setSubmitted(true);
-	};
+	const [theme, setTheme] = useState<Theme>("flower");
 
 	return (
-		<div className="px-6 flex flex-col gap-6">
-			<UserInputGroup username={username} setUsername={setUsername} />
+		<div className="px-5 flex flex-col gap-6">
+			<section>
+				<p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">
+					Choose Style
+				</p>
+				<ThemeSelect theme={theme} setTheme={setTheme} />
+			</section>
 
-			<FlowerSelector
-				flowerType={flowerType}
-				setFlowerType={setFlowerType}
-				flowerColor={flowerColor}
-				setFlowerColor={setFlowerColor}
-			/>
-
-			<button
-				type="button"
-				onClick={handleSubmit}
-				disabled={!username}
-				className="w-full py-3 rounded-xl bg-green-500 text-white font-semibold text-lg transition-all hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
-			>
-				Generate
-			</button>
-
-			{submitted && (
-				<PreviewCard
-					username={username}
-					flowerType={flowerType}
-					flowerColor={flowerColor}
-				/>
-			)}
+			<section>
+				<ThemeContent theme={theme} />
+			</section>
 		</div>
 	);
 }

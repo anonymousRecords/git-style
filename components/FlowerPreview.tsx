@@ -28,19 +28,16 @@ export function FlowerPreview({
 	}, [flowerType, flowerColor, size]);
 
 	return (
-		<div className="flex flex-col items-center gap-2">
-			<div
-				className="rounded-xl bg-white border border-gray-200 flex items-center justify-center"
-				style={{ width: size, height: size }}
-			>
-				<canvas
-					ref={canvasRef}
-					width={size}
-					height={size}
-					className="rounded-xl"
-				/>
-			</div>
-			<span className="text-xs text-gray-500">Preview</span>
+		<div
+			className="rounded-2xl bg-white/80 flex items-center justify-center shrink-0"
+			style={{ width: size, height: size }}
+		>
+			<canvas
+				ref={canvasRef}
+				width={size}
+				height={size}
+				className="rounded-2xl"
+			/>
 		</div>
 	);
 }

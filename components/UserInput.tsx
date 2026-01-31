@@ -1,14 +1,11 @@
 import Input from "./common/Input";
 
-interface UserInputGroupProps {
+interface UserInputProps {
 	username: string;
 	setUsername: (username: string) => void;
 }
 
-export const UserInputGroup = ({
-	username,
-	setUsername,
-}: UserInputGroupProps) => {
+export const UserNameInput = ({ username, setUsername }: UserInputProps) => {
 	return (
 		<Input
 			type="text"
@@ -16,7 +13,6 @@ export const UserInputGroup = ({
 			value={username}
 			onChange={(e) => setUsername(e.target.value)}
 			name="username"
-			label="GitHub Username"
 		/>
 	);
 };
