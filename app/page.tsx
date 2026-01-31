@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { FilterBar } from "@/components/FilterBar";
 import { FlowerSelector } from "@/components/FlowerSelector";
 import PreviewCard from "@/components/PreviewCard";
 import { UserInputGroup } from "@/components/UserInputGroup";
 import type { FlowerType } from "@/lib/animation/types";
 
 export default function Home() {
-	const [theme, setTheme] = useState("plant");
 	const [username, setUsername] = useState("");
 	const [submitted, setSubmitted] = useState(false);
 	const [flowerType, setFlowerType] = useState<FlowerType>("default");
@@ -20,8 +18,8 @@ export default function Home() {
 	};
 
 	return (
-		<div className="px-6 flex flex-col gap-4">
-			<FilterBar theme={theme} setTheme={setTheme} />
+		<div className="px-6 flex flex-col gap-6">
+			<UserInputGroup username={username} setUsername={setUsername} />
 
 			<FlowerSelector
 				flowerType={flowerType}
@@ -30,11 +28,14 @@ export default function Home() {
 				setFlowerColor={setFlowerColor}
 			/>
 
-			<UserInputGroup
-				username={username}
-				setUsername={setUsername}
-				onSubmit={handleSubmit}
-			/>
+			<button
+				type="button"
+				onClick={handleSubmit}
+				disabled={!username}
+				className="w-full py-3 rounded-xl bg-green-500 text-white font-semibold text-lg transition-all hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+			>
+				Generate
+			</button>
 
 			{submitted && (
 				<PreviewCard
