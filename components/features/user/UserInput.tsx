@@ -1,4 +1,4 @@
-import Input from "./common/Input";
+import Input from "@/components/ui/Input";
 
 interface UserInputProps {
 	username: string;

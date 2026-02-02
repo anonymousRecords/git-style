@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Theme } from "@/components/ThemeTabs";
+import type { Theme } from "@/components/features/theme/ThemeTabs";
 
 interface FlowerProps {
 	style: React.CSSProperties;

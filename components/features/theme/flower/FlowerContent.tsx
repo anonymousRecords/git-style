@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { SectionLabel } from "@/components/common/SectionLabel";
-import PreviewCard from "@/components/PreviewCard";
-import { getThemeColors } from "@/components/ThemeTabs";
-import { FlowerSelector } from "@/components/theme-content/flower-content/FlowerSelector";
-import { UserNameInput } from "@/components/UserInput";
+import { SectionLabel } from "@/components/ui/SectionLabel";
+import PreviewCard from "@/components/ui/PreviewCard";
+import { getThemeColors } from "@/components/features/theme/ThemeTabs";
+import { FlowerSelector } from "./FlowerSelector";
+import { UserNameInput } from "@/components/features/user/UserInput";
 import type { FlowerType } from "@/lib/animation/types";
 
 export function FlowerContent() {

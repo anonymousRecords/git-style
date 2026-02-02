@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { SectionLabel } from "@/components/common/SectionLabel";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 import Header from "@/components/layout/Header";
-import { type Theme, ThemeSelect } from "@/components/ThemeTabs";
-import { ThemeContent } from "@/components/theme-content";
+import { type Theme, ThemeSelect } from "@/components/features/theme/ThemeTabs";
+import { ThemeContent } from "@/components/features/theme/ThemeContent";
 
 export default function Home() {
 	const [theme, setTheme] = useState<Theme>("flower");

@@ -1,8 +1,8 @@
 "use client";
 
-import type { Theme } from "@/components/ThemeTabs";
-import { ComingSoonContent } from "./ComingSoonContent";
-import { FlowerContent } from "./flower-content/FlowerContent";
+import type { Theme } from "@/components/features/theme/ThemeTabs";
+import { ComingSoonContent } from "./coming-soon/ComingSoonContent";
+import { FlowerContent } from "./flower/FlowerContent";
 
 interface ThemeContentProps {
 	theme: Theme;
