@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Coiny, Quicksand } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
 
 const quicksand = Quicksand({
 	subsets: ["latin"],
@@ -56,7 +55,6 @@ export default function RootLayout({
 							boxShadow: "0 0 60px rgba(0, 0, 0, 0.04)",
 						}}
 					>
-						<Header />
 						<main className="flex-1 pb-12">{children}</main>
 
 						<footer className="py-6 text-center">
