@@ -1,12 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest, NextResponse } from "next/server";
 import type { FlowerType } from "@/lib/animation/types";
 import { generatePlantAPNG } from "@/lib/theme/generator/generate-plant-apng";
-
-export const config = {
-	api: {
-		responseLimit: false,
-	},
-};
 
 const VALID_FLOWER_TYPES: FlowerType[] = [
 	"default",
@@ -26,15 +20,17 @@ function isValidHexColor(value: unknown): value is string {
 	return typeof value === "string" && /^#[0-9A-Fa-f]{6}$/.test(value);
 }
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse,
+export async function GET(
+	request: NextRequest,
+	{ params }: { params: Promise<{ username: string }> },
 ) {
-	const { username, flower, color } = req.query;
+	const { username } = await params;
+	const searchParams = request.nextUrl.searchParams;
+	const flower = searchParams.get("flower");
+	const color = searchParams.get("color");
 
-	if (typeof username !== "string") {
-		res.status(400).send("Invalid username");
-		return;
+	if (!username) {
+		return new NextResponse("Invalid username", { status: 400 });
 	}
 
 	const flowerType: FlowerType = isValidFlowerType(flower) ? flower : "default";
@@ -50,12 +46,16 @@ export default async function handler(
 			flowerColor,
 		});
 
-		res.setHeader("Content-Type", "image/png");
-		res.setHeader("Cache-Control", "public, s-maxage=86400, max-age=3600");
-		res.setHeader("Content-Length", apngData.length);
-		res.status(200).send(Buffer.from(apngData));
+		return new NextResponse(Buffer.from(apngData), {
+			status: 200,
+			headers: {
+				"Content-Type": "image/png",
+				"Cache-Control": "public, s-maxage=86400, max-age=3600",
+				"Content-Length": apngData.length.toString(),
+			},
+		});
 	} catch (error) {
 		console.error("[APNG GENERATION ERROR]", error);
-		res.status(500).send("Internal Server Error");
+		return new NextResponse("Internal Server Error", { status: 500 });
 	}
 }
