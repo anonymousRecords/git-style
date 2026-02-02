@@ -1,7 +1,26 @@
 {
   "name": "git-style",
   "version": "0.1.0",
-  "private": true,
+  "description": "Transform your GitHub contributions into beautiful SVG badges with various themes",
+  "keywords": [
+    "github",
+    "contributions",
+    "svg",
+    "badge",
+    "readme",
+    "profile",
+    "themes"
+  ],
+  "homepage": "https://git-style.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anonymousRecords/git-style.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anonymousRecords/git-style/issues"
+  },
+  "author": "anonymousRecords",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
