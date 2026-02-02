@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type Theme = "flower" | "cloud" | "hair";
 
@@ -15,27 +15,34 @@ interface ThemeCardProps {
 }
 
 function MiniGrid({ colors, animate }: { colors: string[]; animate: boolean }) {
-	return (
-		<div className="grid grid-cols-7 gap-[2px]">
-			{Array.from({ length: 21 }).map((_, i) => {
-				const intensity = Math.random();
-				const colorIndex = Math.floor(intensity * colors.length);
-				const delay = (i % 7) * 0.05 + Math.floor(i / 7) * 0.08;
+	const cells = useMemo(() => {
+		return Array.from({ length: 21 }).map((_, i) => {
+			const intensity = Math.random();
+			const colorIndex = Math.floor(intensity * colors.length);
+			const delay = (i % 7) * 0.03 + Math.floor(i / 7) * 0.05;
+			return { intensity, colorIndex, delay, id: i };
+		});
+	}, [colors.length]);
 
-				return (
-					<div
-						key={`${i}-${Math.random()}`}
-						className="w-2 h-2 rounded-sm transition-all duration-300"
-						style={{
-							backgroundColor:
-								intensity > 0.3 ? colors[colorIndex] : "rgba(0,0,0,0.06)",
-							transform: animate ? "scale(1)" : "scale(0.8)",
-							opacity: animate ? 1 : 0.5,
-							transitionDelay: animate ? `${delay}s` : "0s",
-						}}
-					/>
-				);
-			})}
+	return (
+		<div className="grid grid-cols-7 gap-[3px]">
+			{cells.map((cell) => (
+				<div
+					key={cell.id}
+					className="w-[7px] h-[7px] rounded-[2px] transition-all"
+					style={{
+						backgroundColor:
+							cell.intensity > 0.3
+								? colors[cell.colorIndex]
+								: "rgba(0,0,0,0.04)",
+						transform: animate ? "scale(1)" : "scale(0.7)",
+						opacity: animate ? 1 : 0.4,
+						transitionDuration: "400ms",
+						transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+						transitionDelay: animate ? `${cell.delay}s` : "0s",
+					}}
+				/>
+			))}
 		</div>
 	);
 }
@@ -56,47 +63,66 @@ function ThemeCard({
 			onClick={onClick}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
+			disabled={!isAvailable}
+			aria-pressed={isSelected}
+			aria-label={`${label} theme${!isAvailable ? " (coming soon)" : ""}`}
 			className={`
-				relative flex-1 p-4 rounded-2xl transition-all duration-300 text-left
+				relative flex-1 p-4 rounded-2xl text-left w-full
+				transition-all duration-300
+				focus-visible:ring-2 focus-visible:ring-offset-2
 				${
 					isSelected
-						? "bg-white shadow-lg scale-[1.02]"
-						: "bg-gray-50 hover:bg-white hover:shadow-md"
+						? "bg-white shadow-lifted focus-visible:ring-pink-400"
+						: "bg-white/60 hover:bg-white hover:shadow-soft focus-visible:ring-gray-400"
 				}
-				${!isAvailable ? "opacity-60" : ""}
+				${!isAvailable ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
 			`}
 			style={{
-				outline: isSelected ? `2px solid ${colors[1]}` : "none",
-				outlineOffset: "2px",
+				border: isSelected
+					? `2px solid ${colors[2]}30`
+					: "2px solid transparent",
+				transform: isSelected
+					? "scale(1.02)"
+					: isHovered && isAvailable
+						? "scale(1.01)"
+						: "scale(1)",
 			}}
 		>
 			{/* Mini Preview Grid */}
-			<div className="mb-3">
+			<div className="mb-4">
 				<MiniGrid colors={colors} animate={isHovered || isSelected} />
 			</div>
 
 			{/* Label */}
-			<div className="flex items-center justify-between">
-				<div>
-					<p className="font-semibold text-gray-900 text-sm">{label}</p>
-					<p className="text-xs text-gray-500">{description}</p>
+			<div className="flex items-center justify-between gap-2">
+				<div className="min-w-0">
+					<p
+						className="font-semibold text-sm truncate"
+						style={{ color: isSelected ? colors[3] : "#3d3a36" }}
+					>
+						{label}
+					</p>
+					<p className="text-[11px] text-gray-400 truncate">{description}</p>
 				</div>
 
 				{/* Selection Indicator */}
 				{isSelected && (
 					<div
-						className="w-5 h-5 rounded-full flex items-center justify-center"
-						style={{ backgroundColor: colors[1] }}
+						className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300"
+						style={{
+							backgroundColor: colors[2],
+							transform: "scale(1)",
+						}}
 					>
 						<svg
-							role="img"
-							aria-label="Check"
 							className="w-3 h-3 text-white"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
 							strokeWidth={3}
+							aria-hidden="true"
 						>
+							<title>Selected</title>
 							<path
 								strokeLinecap="round"
 								strokeLinejoin="round"
@@ -107,7 +133,7 @@ function ThemeCard({
 				)}
 
 				{!isAvailable && (
-					<span className="text-[10px] font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+					<span className="text-[10px] font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full shrink-0">
 						Soon
 					</span>
 				)}
@@ -147,15 +173,20 @@ const THEMES = [
 
 export function ThemeSelect({ theme, setTheme }: ThemeSelectProps) {
 	return (
-		<div className="flex gap-3">
-			{THEMES.map((t) => (
-				<ThemeCard
+		<div className="grid grid-cols-3 gap-2 sm:gap-3">
+			{THEMES.map((t, index) => (
+				<div
 					key={t.id}
-					{...t}
-					isSelected={theme === t.id}
-					isAvailable={t.available}
-					onClick={() => t.available && setTheme(t.id)}
-				/>
+					className="animate-fade-in-scale opacity-0"
+					style={{ animationDelay: `${0.1 + index * 0.05}s` }}
+				>
+					<ThemeCard
+						{...t}
+						isSelected={theme === t.id}
+						isAvailable={t.available}
+						onClick={() => t.available && setTheme(t.id)}
+					/>
+				</div>
 			))}
 		</div>
 	);
