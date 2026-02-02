@@ -1,6 +1,9 @@
 "use client";
 
-import { getThemeColors, type Theme } from "@/components/features/theme/ThemeTabs";
+import {
+	getThemeColors,
+	type Theme,
+} from "@/components/features/theme/ThemeTabs";
 
 interface ComingSoonContentProps {
 	theme: Theme;

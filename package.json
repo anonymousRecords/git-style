@@ -1,51 +1,51 @@
 {
-  "name": "git-style",
-  "version": "0.1.0",
-  "description": "Transform your GitHub contributions into beautiful SVG badges with various themes",
-  "keywords": [
-    "github",
-    "contributions",
-    "svg",
-    "badge",
-    "readme",
-    "profile",
-    "themes"
-  ],
-  "homepage": "https://git-style.vercel.app",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/anonymousRecords/git-style.git"
-  },
-  "bugs": {
-    "url": "https://github.com/anonymousRecords/git-style/issues"
-  },
-  "author": "anonymousRecords",
-  "license": "MIT",
-  "packageManager": "pnpm@10.17.1",
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "biome check .",
-    "lint:fix": "biome check --write .",
-    "format": "biome format --write ."
-  },
-  "dependencies": {
-    "@heroicons/react": "^2.2.0",
-    "@napi-rs/canvas": "^0.1.88",
-    "next": "16.1.5",
-    "postcss": "^8.5.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "upng-js": "^2.1.0"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.3.13",
-    "@tailwindcss/postcss": "^4.1.7",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "tailwindcss": "^4.1.7",
-    "typescript": "^5"
-  }
+	"name": "git-style",
+	"version": "0.1.0",
+	"description": "Transform your GitHub contributions into beautiful SVG badges with various themes",
+	"keywords": [
+		"github",
+		"contributions",
+		"svg",
+		"badge",
+		"readme",
+		"profile",
+		"themes"
+	],
+	"homepage": "https://git-style.vercel.app",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/anonymousRecords/git-style.git"
+	},
+	"bugs": {
+		"url": "https://github.com/anonymousRecords/git-style/issues"
+	},
+	"author": "anonymousRecords",
+	"license": "MIT",
+	"packageManager": "pnpm@10.17.1",
+	"scripts": {
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"format": "biome format --write ."
+	},
+	"dependencies": {
+		"@heroicons/react": "^2.2.0",
+		"@napi-rs/canvas": "^0.1.88",
+		"next": "16.1.5",
+		"postcss": "^8.5.3",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"upng-js": "^2.1.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.13",
+		"@tailwindcss/postcss": "^4.1.7",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"tailwindcss": "^4.1.7",
+		"typescript": "^5"
+	}
 }

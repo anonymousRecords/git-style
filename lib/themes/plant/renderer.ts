@@ -1,6 +1,6 @@
 import type { Canvas, SKRSContext2D } from "@napi-rs/canvas";
-import type { CommitLevel } from "@/lib/utils/commit-level";
 import { adjustBrightness } from "@/lib/utils/color";
+import type { CommitLevel } from "@/lib/utils/commit-level";
 import type { FlowerType, PlantElement, WindEffect } from "../types";
 import { CELL_SIZE, OFFSET_X, OFFSET_Y, PLANT_COLORS } from "./constants";
 
