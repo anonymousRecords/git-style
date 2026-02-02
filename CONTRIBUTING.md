@@ -14,13 +14,13 @@ cd git-style
 2. 의존성 설치
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. 개발 서버 실행
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 4. http://localhost:3000 에서 확인
@@ -49,7 +49,7 @@ git checkout -b feature/your-feature-name
 2. 코드 작성 및 린트 확인
 
 ```bash
-npm run lint
+pnpm lint
 ```
 
 3. 커밋 메시지 규칙

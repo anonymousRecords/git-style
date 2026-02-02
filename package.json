@@ -21,6 +21,7 @@
   },
   "author": "anonymousRecords",
   "license": "MIT",
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
