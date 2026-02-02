@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { FlowerType } from "@/lib/animation/types";
 import { drawFlowerPreview } from "@/lib/client/draw-flower";
 
@@ -16,7 +16,6 @@ export function FlowerPreview({
 	size = 160,
 }: FlowerPreviewProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const [isAnimating, setIsAnimating] = useState(false);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -25,11 +24,7 @@ export function FlowerPreview({
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		setIsAnimating(true);
 		drawFlowerPreview(ctx, flowerType, flowerColor, size);
-
-		const timer = setTimeout(() => setIsAnimating(false), 300);
-		return () => clearTimeout(timer);
 	}, [flowerType, flowerColor, size]);
 
 	return (
@@ -42,7 +37,6 @@ export function FlowerPreview({
 					"linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)",
 				boxShadow:
 					"inset 0 1px 2px rgba(255,255,255,0.8), 0 2px 8px rgba(0,0,0,0.04)",
-				transform: isAnimating ? "scale(0.98)" : "scale(1)",
 			}}
 		>
 			<canvas
@@ -52,7 +46,6 @@ export function FlowerPreview({
 				className="rounded-2xl"
 				style={{
 					transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-					transform: isAnimating ? "scale(1.05)" : "scale(1)",
 				}}
 			/>
 		</div>
