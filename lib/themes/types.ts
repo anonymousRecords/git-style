@@ -1,4 +1,4 @@
-import type { CommitLevel } from "@/lib/themes";
+import type { CommitLevel } from "@/lib/utils/commit-level";
 
 export type FlowerType = "default" | "tulip" | "sunflower" | "cherry";
 
@@ -33,11 +33,13 @@ export const QUALITY_PRESETS: Record<
 	high: { frameCount: 16, frameDelay: 80 },
 };
 
-export const PLANT_COLORS = {
-	stem: {
-		light: "#22c55e",
-		dark: "#15803d",
-	},
-	flower: "#fbbf24",
-	soil: "#7B4A22",
-} as const;
+export interface ThemeStyle {
+	getPath?: (level: CommitLevel) => string | null;
+	getEmoji?: (level: CommitLevel) => string | null;
+	colorMap?: Record<CommitLevel, string>;
+	label: string;
+	emoji?: string;
+	background?: string;
+	backgroundPattern?: string;
+	showBaseDot?: boolean;
+}

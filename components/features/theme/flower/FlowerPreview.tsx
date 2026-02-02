@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { FlowerType } from "@/lib/animation/types";
-import { drawFlowerPreview } from "@/lib/client/draw-flower";
+import { drawFlowerPreview } from "@/lib/themes/plant/client-preview";
+import type { FlowerType } from "@/lib/themes/types";
 
 interface FlowerPreviewProps {
 	flowerType: FlowerType;

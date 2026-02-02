@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { SectionLabel } from "@/components/ui/SectionLabel";
-import PreviewCard from "@/components/ui/PreviewCard";
 import { getThemeColors } from "@/components/features/theme/ThemeTabs";
-import { FlowerSelector } from "./FlowerSelector";
 import { UserNameInput } from "@/components/features/user/UserInput";
-import type { FlowerType } from "@/lib/animation/types";
+import PreviewCard from "@/components/ui/PreviewCard";
+import { SectionLabel } from "@/components/ui/SectionLabel";
+import type { FlowerType } from "@/lib/themes/types";
+import { FlowerSelector } from "./FlowerSelector";
 
 export function FlowerContent() {
 	const [username, setUsername] = useState("");
@@ -32,7 +32,6 @@ export function FlowerContent() {
 
 	return (
 		<div className="space-y-8">
-			{/* Customize */}
 			<div
 				className="animate-fade-in opacity-0"
 				style={{ animationDelay: "0.15s" }}
@@ -54,7 +53,6 @@ export function FlowerContent() {
 				</div>
 			</div>
 
-			{/* Username & Generate */}
 			<div
 				className="animate-fade-in opacity-0"
 				style={{ animationDelay: "0.25s" }}
@@ -76,7 +74,6 @@ export function FlowerContent() {
 							backgroundColor: colors.accent,
 						}}
 					>
-						{/* Hover gradient overlay */}
 						<div
 							className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
 							style={{
@@ -85,7 +82,6 @@ export function FlowerContent() {
 							}}
 						/>
 
-						{/* Button content */}
 						<span className="relative flex items-center justify-center gap-2">
 							{isGenerating ? (
 								<>
@@ -119,7 +115,6 @@ export function FlowerContent() {
 				</div>
 			</div>
 
-			{/* Result */}
 			{submitted && (
 				<div
 					className="animate-fade-in-scale opacity-0"

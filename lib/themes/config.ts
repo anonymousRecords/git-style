@@ -1,15 +1,5 @@
-export type CommitLevel = "none" | "low" | "medium" | "high" | "max";
-
-export interface ThemeStyle {
-	getPath?: (level: CommitLevel) => string | null;
-	getEmoji?: (level: CommitLevel) => string | null;
-	colorMap?: Record<CommitLevel, string>;
-	label: string;
-	emoji?: string;
-	background?: string;
-	backgroundPattern?: string;
-	showBaseDot?: boolean;
-}
+import type { CommitLevel } from "@/lib/utils/commit-level";
+import type { ThemeStyle } from "./types";
 
 export const HairTheme: ThemeStyle = {
 	label: "Hair",
@@ -33,7 +23,7 @@ export const HairTheme: ThemeStyle = {
 		}
 	},
 	colorMap: {
-		none: "#fffaf0", 
+		none: "#fffaf0",
 		low: "#1f2937",
 		medium: "#1f2937",
 		high: "#1f2937",
@@ -86,13 +76,13 @@ export const PlantTheme: ThemeStyle = {
 			case "none":
 				return null;
 			case "low":
-				return "🫘"; // 씨앗
+				return "🫘";
 			case "medium":
-				return "🌱"; // 새싹
+				return "🌱";
 			case "high":
-				return "🌿"; // 풀잎
+				return "🌿";
 			case "max":
-				return "🌻"; // 꽃
+				return "🌻";
 			default:
 				return null;
 		}
@@ -104,11 +94,3 @@ export const themes: Record<string, ThemeStyle> = {
 	fire: FireTheme,
 	plant: PlantTheme,
 };
-
-export function getCommitLevel(commitCount: number): CommitLevel {
-	if (commitCount === 0) return "none";
-	if (commitCount <= 2) return "low";
-	if (commitCount <= 4) return "medium";
-	if (commitCount <= 7) return "high";
-	return "max";
-}

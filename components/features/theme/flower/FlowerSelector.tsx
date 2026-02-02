@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { FlowerType } from "@/lib/animation/types";
+import type { FlowerType } from "@/lib/themes/types";
 import { FlowerPreview } from "./FlowerPreview";
 
 interface FlowerSelectorProps {
@@ -38,7 +38,6 @@ export function FlowerSelector({
 	return (
 		<div className="flex flex-col sm:flex-row gap-5 items-start">
 			<div className="flex-1 space-y-5 w-full sm:w-auto">
-				{/* Flower Type */}
 				<div>
 					<p
 						className="text-[11px] font-medium uppercase tracking-wide mb-3"
@@ -69,7 +68,6 @@ export function FlowerSelector({
 					</div>
 				</div>
 
-				{/* Flower Color */}
 				<div>
 					<p
 						className="text-[11px] font-medium uppercase tracking-wide mb-3"
@@ -109,7 +107,6 @@ export function FlowerSelector({
 									}}
 								/>
 
-								{/* Tooltip */}
 								<span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[10px] font-medium text-pink-800/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
 									{preset.label}
 								</span>
@@ -119,7 +116,6 @@ export function FlowerSelector({
 				</div>
 			</div>
 
-			{/* Preview */}
 			<div className="relative mx-auto sm:mx-0">
 				<FlowerPreview
 					flowerType={flowerType}
@@ -127,7 +123,6 @@ export function FlowerSelector({
 					size={100}
 				/>
 
-				{/* Subtle glow behind preview */}
 				<div
 					className="absolute inset-0 -z-10 rounded-2xl blur-xl opacity-30"
 					style={{ backgroundColor: flowerColor }}

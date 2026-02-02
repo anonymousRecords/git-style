@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import type { FlowerType } from "@/lib/animation/types";
+import type { FlowerType } from "@/lib/themes/types";
 
 interface PreviewCardProps {
 	username: string;
@@ -40,7 +40,6 @@ export default function PreviewCard({
 
 	return (
 		<div className="space-y-5">
-			{/* Preview Image */}
 			<div
 				className="relative overflow-hidden rounded-2xl bg-white p-3 transition-all duration-300"
 				style={{
@@ -101,7 +100,6 @@ export default function PreviewCard({
 				/>
 			</div>
 
-			{/* Markdown Code Block */}
 			<div
 				className="rounded-2xl overflow-hidden transition-all duration-300"
 				style={{
@@ -173,7 +171,6 @@ export default function PreviewCard({
 				</div>
 			</div>
 
-			{/* Usage hint */}
 			<p className="text-center text-xs text-gray-400">
 				Paste this into your GitHub README.md
 			</p>

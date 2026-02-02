@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import type { FlowerType } from "@/lib/animation/types";
-import { generatePlantAPNG } from "@/lib/theme/generator/generate-plant-apng";
+import { generatePlantAPNG } from "@/lib/themes/plant/generator";
+import type { FlowerType } from "@/lib/themes/types";
 
 const VALID_FLOWER_TYPES: FlowerType[] = [
 	"default",

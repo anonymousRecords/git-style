@@ -1,15 +1,8 @@
 import type { Canvas, SKRSContext2D } from "@napi-rs/canvas";
-import type { CommitLevel } from "@/lib/themes";
-import type {
-	FlowerType,
-	PlantElement,
-	WindEffect,
-} from "../../animation/types";
-import { PLANT_COLORS } from "../../animation/types";
-
-const CELL_SIZE = 14;
-const OFFSET_X = 20;
-const OFFSET_Y = 60;
+import type { CommitLevel } from "@/lib/utils/commit-level";
+import { adjustBrightness } from "@/lib/utils/color";
+import type { FlowerType, PlantElement, WindEffect } from "../types";
+import { CELL_SIZE, OFFSET_X, OFFSET_Y, PLANT_COLORS } from "./constants";
 
 export function createPlantElements(
 	weeks: { count: number }[][],
@@ -33,7 +26,7 @@ export function createPlantElements(
 	return elements;
 }
 
-interface renderPlantFrameProps {
+interface RenderPlantFrameProps {
 	canvas: Canvas;
 	ctx: SKRSContext2D;
 	elements: PlantElement[];
@@ -55,7 +48,7 @@ export function renderPlantFrame({
 	username,
 	flowerType = "default",
 	flowerColor,
-}: renderPlantFrameProps): void {
+}: RenderPlantFrameProps): void {
 	const width = canvas.width;
 	const height = canvas.height;
 
@@ -471,14 +464,6 @@ function drawCherryBlossomHead(ctx: SKRSContext2D, color?: string): void {
 		);
 		ctx.fill();
 	}
-}
-
-function adjustBrightness(hex: string, percent: number): string {
-	const num = Number.parseInt(hex.replace("#", ""), 16);
-	const r = Math.min(255, Math.max(0, (num >> 16) + percent));
-	const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00ff) + percent));
-	const b = Math.min(255, Math.max(0, (num & 0x0000ff) + percent));
-	return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
 }
 
 export function getCanvasDimensions(weeksCount: number): {

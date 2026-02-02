@@ -1,14 +1,14 @@
 import { createCanvas } from "@napi-rs/canvas";
-import { chunkIntoWeeks, fetchContributions } from "@/lib/github";
-import { getCommitLevel } from "@/lib/themes";
-import { type APNGFrame, encodeAPNG } from "../../animation/apng-encoder";
-import type { AnimationConfig, FlowerType, WindEffect } from "../../animation/types";
-import { QUALITY_PRESETS } from "../../animation/types";
+import { chunkIntoWeeks, fetchContributions } from "@/lib/api/github";
+import { type APNGFrame, encodeAPNG } from "@/lib/encoding/apng";
+import { getCommitLevel } from "@/lib/utils/commit-level";
+import type { AnimationConfig, FlowerType, WindEffect } from "../types";
+import { QUALITY_PRESETS } from "../types";
 import {
 	createPlantElements,
 	getCanvasDimensions,
 	renderPlantFrame,
-} from "../renderer/render-plant";
+} from "./renderer";
 
 const cache = new Map<string, { data: Uint8Array; timestamp: number }>();
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour
@@ -26,9 +26,7 @@ export async function generatePlantAPNG(
 ): Promise<Uint8Array> {
 	// Support both old signature (username, quality) and new options object
 	const opts: GeneratePlantAPNGOptions =
-		typeof options === "string"
-			? { username: options, quality }
-			: options;
+		typeof options === "string" ? { username: options, quality } : options;
 
 	const {
 		username,
