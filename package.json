@@ -1,7 +1,7 @@
 {
 	"name": "git-style",
 	"version": "0.1.0",
-	"description": "Transform your GitHub contributions into beautiful SVG badges with various themes",
+	"description": "Turn your GitHub contributions into beautiful visuals. Style your commits your way.",
 	"keywords": [
 		"github",
 		"contributions",
