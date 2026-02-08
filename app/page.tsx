@@ -11,19 +11,16 @@ export default function Home() {
 
 	return (
 		<div className="flex flex-col">
-			<Header theme={theme} />
-			<div className="px-6 flex flex-col gap-8">
-				<section
-					className="animate-fade-in opacity-0"
-					style={{ animationDelay: "0.1s" }}
-				>
-					<SectionLabel>Choose Style</SectionLabel>
+			<Header />
+			<div className="flex flex-col gap-10">
+				<section className="animate-fade-in opacity-0">
+					<SectionLabel>Style</SectionLabel>
 					<ThemeSelect theme={theme} setTheme={setTheme} />
 				</section>
 
 				<section
 					className="animate-fade-in opacity-0"
-					style={{ animationDelay: "0.2s" }}
+					style={{ animationDelay: "0.05s" }}
 				>
 					<ThemeContent theme={theme} />
 				</section>

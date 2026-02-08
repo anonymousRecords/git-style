@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import type { FlowerType } from "@/lib/themes/types";
 import { FlowerPreview } from "./FlowerPreview";
 
@@ -33,34 +32,25 @@ export function FlowerSelector({
 	flowerColor,
 	setFlowerColor,
 }: FlowerSelectorProps) {
-	const [hoveredColor, setHoveredColor] = useState<string | null>(null);
-
 	return (
 		<div className="flex flex-col sm:flex-row gap-5 items-start">
 			<div className="flex-1 space-y-5 w-full sm:w-auto">
 				<div>
-					<p
-						className="text-[11px] font-medium uppercase tracking-wide mb-3"
-						style={{ color: "rgba(190, 24, 93, 0.6)" }}
-					>
+					<p className="text-[11px] font-medium text-neutral-500 mb-2.5">
 						Type
 					</p>
-					<div className="flex flex-wrap gap-2">
+					<div className="flex flex-wrap gap-1.5">
 						{FLOWER_OPTIONS.map((option) => (
 							<button
 								type="button"
 								key={option.type}
 								onClick={() => setFlowerType(option.type)}
 								aria-pressed={flowerType === option.type}
-								className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:ring-offset-1 ${
+								className={`px-3 py-1.5 rounded-md text-sm transition-colors duration-150 ${
 									flowerType === option.type
-										? "bg-white text-pink-800 shadow-soft"
-										: "bg-white/50 text-pink-700/60 hover:bg-white/80 hover:text-pink-800"
+										? "bg-white text-neutral-900 shadow-sm border border-neutral-200"
+										: "text-neutral-600 hover:text-neutral-900 hover:bg-white/60"
 								}`}
-								style={{
-									transform:
-										flowerType === option.type ? "scale(1.02)" : "scale(1)",
-								}}
 							>
 								{option.label}
 							</button>
@@ -69,63 +59,44 @@ export function FlowerSelector({
 				</div>
 
 				<div>
-					<p
-						className="text-[11px] font-medium uppercase tracking-wide mb-3"
-						style={{ color: "rgba(190, 24, 93, 0.6)" }}
-					>
+					<p className="text-[11px] font-medium text-neutral-500 mb-2.5">
 						Color
 					</p>
-					<div className="flex flex-wrap gap-2.5">
+					<div className="flex flex-wrap gap-2">
 						{COLOR_PRESETS.map((preset) => (
 							<button
 								type="button"
 								key={preset.color}
 								onClick={() => setFlowerColor(preset.color)}
-								onMouseEnter={() => setHoveredColor(preset.color)}
-								onMouseLeave={() => setHoveredColor(null)}
-								className="relative group focus-visible:outline-none"
+								className="group relative"
 								aria-label={`Select ${preset.label} color`}
 								aria-pressed={flowerColor === preset.color}
 							>
 								<div
-									className={`w-8 h-8 rounded-full transition-all duration-200 group-focus-visible:ring-2 group-focus-visible:ring-pink-500 group-focus-visible:ring-offset-2 ${
+									className={`w-7 h-7 rounded-full transition-transform duration-150 ${
 										flowerColor === preset.color
-											? "ring-2 ring-pink-400/50 ring-offset-2 ring-offset-pink-50"
-											: ""
+											? "ring-2 ring-neutral-900 ring-offset-2"
+											: "hover:scale-110"
 									}`}
 									style={{
 										backgroundColor: preset.color,
 										boxShadow:
 											preset.color === "#ffffff"
-												? "inset 0 0 0 1px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)"
-												: "0 2px 4px rgba(0,0,0,0.08), inset 0 -2px 4px rgba(0,0,0,0.08)",
-										transform:
-											hoveredColor === preset.color ||
-											flowerColor === preset.color
-												? "scale(1.1)"
-												: "scale(1)",
+												? "inset 0 0 0 1px rgba(0,0,0,0.1)"
+												: "inset 0 -2px 4px rgba(0,0,0,0.1)",
 									}}
 								/>
-
-								<span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[10px] font-medium text-pink-800/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-									{preset.label}
-								</span>
 							</button>
 						))}
 					</div>
 				</div>
 			</div>
 
-			<div className="relative mx-auto sm:mx-0">
+			<div className="mx-auto sm:mx-0">
 				<FlowerPreview
 					flowerType={flowerType}
 					flowerColor={flowerColor}
-					size={100}
-				/>
-
-				<div
-					className="absolute inset-0 -z-10 rounded-2xl blur-xl opacity-30"
-					style={{ backgroundColor: flowerColor }}
+					size={88}
 				/>
 			</div>
 		</div>

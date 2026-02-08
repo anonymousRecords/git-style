@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 type Theme = "flower" | "cloud" | "hair";
 
@@ -14,13 +14,18 @@ interface ThemeCardProps {
 	onClick: () => void;
 }
 
-function MiniGrid({ colors, animate }: { colors: string[]; animate: boolean }) {
+function MiniGrid({
+	colors,
+	isSelected,
+}: {
+	colors: string[];
+	isSelected: boolean;
+}) {
 	const cells = useMemo(() => {
 		return Array.from({ length: 21 }).map((_, i) => {
 			const intensity = Math.random();
 			const colorIndex = Math.floor(intensity * colors.length);
-			const delay = (i % 7) * 0.03 + Math.floor(i / 7) * 0.05;
-			return { intensity, colorIndex, delay, id: i };
+			return { intensity, colorIndex, id: i };
 		});
 	}, [colors.length]);
 
@@ -29,17 +34,13 @@ function MiniGrid({ colors, animate }: { colors: string[]; animate: boolean }) {
 			{cells.map((cell) => (
 				<div
 					key={cell.id}
-					className="w-[7px] h-[7px] rounded-[2px] transition-all"
+					className="w-[6px] h-[6px] rounded-[2px] transition-colors duration-200"
 					style={{
 						backgroundColor:
 							cell.intensity > 0.3
 								? colors[cell.colorIndex]
 								: "rgba(0,0,0,0.04)",
-						transform: animate ? "scale(1)" : "scale(0.7)",
-						opacity: animate ? 1 : 0.4,
-						transitionDuration: "400ms",
-						transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)",
-						transitionDelay: animate ? `${cell.delay}s` : "0s",
+						opacity: isSelected ? 1 : 0.7,
 					}}
 				/>
 			))}
@@ -55,67 +56,48 @@ function ThemeCard({
 	isAvailable,
 	onClick,
 }: ThemeCardProps) {
-	const [isHovered, setIsHovered] = useState(false);
-
 	return (
 		<button
 			type="button"
 			onClick={onClick}
-			onMouseEnter={() => setIsHovered(true)}
-			onMouseLeave={() => setIsHovered(false)}
 			disabled={!isAvailable}
 			aria-pressed={isSelected}
 			aria-label={`${label} theme${!isAvailable ? " (coming soon)" : ""}`}
 			className={`
-				relative flex-1 p-4 rounded-2xl text-left w-full
-				transition-all duration-300
-				focus-visible:ring-2 focus-visible:ring-offset-2
+				relative flex-1 p-3.5 rounded-xl text-left w-full
+				transition-all duration-200
+				border
 				${
 					isSelected
-						? "bg-white shadow-lifted focus-visible:ring-pink-400"
-						: "bg-white/60 hover:bg-white hover:shadow-soft focus-visible:ring-gray-400"
+						? "bg-white border-neutral-200 shadow-sm"
+						: "bg-neutral-50 border-transparent hover:bg-white hover:border-neutral-100"
 				}
-				${!isAvailable ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+				${!isAvailable ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
 			`}
-			style={{
-				border: isSelected
-					? `2px solid ${colors[2]}30`
-					: "2px solid transparent",
-				transform: isSelected
-					? "scale(1.02)"
-					: isHovered && isAvailable
-						? "scale(1.01)"
-						: "scale(1)",
-			}}
 		>
-			{/* Mini Preview Grid */}
-			<div className="mb-4">
-				<MiniGrid colors={colors} animate={isHovered || isSelected} />
+			<div className="mb-3">
+				<MiniGrid colors={colors} isSelected={isSelected} />
 			</div>
 
-			{/* Label */}
 			<div className="flex items-center justify-between gap-2">
 				<div className="min-w-0">
 					<p
-						className="font-semibold text-sm truncate"
-						style={{ color: isSelected ? colors[3] : "#3d3a36" }}
+						className={`text-sm font-medium ${
+							isSelected ? "text-neutral-900" : "text-neutral-600"
+						}`}
 					>
 						{label}
 					</p>
-					<p className="text-[11px] text-gray-400 truncate">{description}</p>
+					<p className="text-[11px] text-neutral-400 mt-0.5">{description}</p>
 				</div>
 
-				{/* Selection Indicator */}
 				{isSelected && (
 					<div
-						className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300"
-						style={{
-							backgroundColor: colors[2],
-							transform: "scale(1)",
-						}}
+						className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
+						style={{ backgroundColor: colors[2] }}
 					>
 						<svg
-							className="w-3 h-3 text-white"
+							className="w-2.5 h-2.5 text-white"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -133,7 +115,7 @@ function ThemeCard({
 				)}
 
 				{!isAvailable && (
-					<span className="text-[10px] font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full shrink-0">
+					<span className="text-[10px] font-medium text-neutral-400 bg-neutral-100 px-1.5 py-0.5 rounded shrink-0">
 						Soon
 					</span>
 				)}
@@ -173,20 +155,15 @@ const THEMES = [
 
 export function ThemeSelect({ theme, setTheme }: ThemeSelectProps) {
 	return (
-		<div className="grid grid-cols-3 gap-2 sm:gap-3">
-			{THEMES.map((t, index) => (
-				<div
+		<div className="grid grid-cols-3 gap-2">
+			{THEMES.map((t) => (
+				<ThemeCard
 					key={t.id}
-					className="animate-fade-in-scale opacity-0"
-					style={{ animationDelay: `${0.1 + index * 0.05}s` }}
-				>
-					<ThemeCard
-						{...t}
-						isSelected={theme === t.id}
-						isAvailable={t.available}
-						onClick={() => t.available && setTheme(t.id)}
-					/>
-				</div>
+					{...t}
+					isSelected={theme === t.id}
+					isAvailable={t.available}
+					onClick={() => t.available && setTheme(t.id)}
+				/>
 			))}
 		</div>
 	);
