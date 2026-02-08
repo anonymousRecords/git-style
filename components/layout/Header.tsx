@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Header() {
 	return (
-		<header className="pt-12 pb-10 sm:pt-16 sm:pb-12">
+		<header className="pt-12 pb-4 sm:pt-16 sm:pb-6">
 			<Link href="/" className="block">
 				<h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-neutral-900">
 					Git Style
