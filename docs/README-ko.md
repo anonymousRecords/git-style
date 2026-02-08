@@ -1,17 +1,17 @@
 <div align="center">
-  <img src="./docs/doc.png" alt="Git Style Preview" width="300">
+  <img src="./doc.png" alt="Git Style Preview" width="300">
 </div>
 
 <br />
 
-- [한국어](./docs/README-ko.md)
+- [English](../README.md)
 - [git-style.vercel.app](https://git-style.vercel.app)
 
 ## Usage
 
-1. Pick a theme and style.
-2. Enter your GitHub username.
-3. Paste the generated markdown into your `README.md`.
+1. 테마와 스타일을 선택한다.
+2. GitHub username을 입력한다.
+3. 생성된 마크다운을 `README.md`에 붙여넣는다.
 
 <br />
 
@@ -29,7 +29,7 @@
 
 ### Flower
 
-Customize flower type and color.
+꽃 종류와 색상을 커스터마이징할 수 있습니다.
 
 **Types**: `default`(Daisy), `tulip`, `sunflower`, `cherry`
 
@@ -37,8 +37,8 @@ Customize flower type and color.
 
 | Param | Description | Default |
 |-------|-------------|---------|
-| `flower` | Flower type | `default` |
-| `color` | HEX color code | `#fbbf24` |
+| `flower` | 꽃 종류 | `default` |
+| `color` | HEX 색상 코드 | `#fbbf24` |
 
 ## Development
 
