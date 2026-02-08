@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	title: "Git Style",
+	title: "Git Style - Your commits, your style",
 	description:
 		"Turn your GitHub contributions into beautiful visuals. Style your commits your way.",
 };
