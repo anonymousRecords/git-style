@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -26,7 +27,11 @@ export default function RootLayout({
 						<main className="pb-16">{children}</main>
 
 						<footer className="py-8 border-t border-neutral-100">
-							<p className="text-xs text-neutral-400 text-center">Hanspoon</p>
+							<p className="text-xs text-neutral-400 text-center">
+								<Link href="https://github.com/https://github.com/anonymousRecords/git-style">
+									Made by anonymousRecords @GitHub
+								</Link>
+							</p>
 						</footer>
 					</div>
 				</div>
