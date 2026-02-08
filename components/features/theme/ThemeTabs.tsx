@@ -1,128 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Theme = "flower" | "cloud" | "hair";
-
-interface ThemeCardProps {
-	id: Theme;
-	label: string;
-	description: string;
-	colors: string[];
-	isSelected: boolean;
-	isAvailable: boolean;
-	onClick: () => void;
-}
-
-function MiniGrid({
-	colors,
-	isSelected,
-}: {
-	colors: string[];
-	isSelected: boolean;
-}) {
-	const cells = useMemo(() => {
-		return Array.from({ length: 21 }).map((_, i) => {
-			const intensity = Math.random();
-			const colorIndex = Math.floor(intensity * colors.length);
-			return { intensity, colorIndex, id: i };
-		});
-	}, [colors.length]);
-
-	return (
-		<div className="grid grid-cols-7 gap-[3px]">
-			{cells.map((cell) => (
-				<div
-					key={cell.id}
-					className="w-[6px] h-[6px] rounded-[2px] transition-colors duration-200"
-					style={{
-						backgroundColor:
-							cell.intensity > 0.3
-								? colors[cell.colorIndex]
-								: "rgba(0,0,0,0.04)",
-						opacity: isSelected ? 1 : 0.7,
-					}}
-				/>
-			))}
-		</div>
-	);
-}
-
-function ThemeCard({
-	label,
-	description,
-	colors,
-	isSelected,
-	isAvailable,
-	onClick,
-}: ThemeCardProps) {
-	return (
-		<button
-			type="button"
-			onClick={onClick}
-			disabled={!isAvailable}
-			aria-pressed={isSelected}
-			aria-label={`${label} theme${!isAvailable ? " (coming soon)" : ""}`}
-			className={`
-				relative flex-1 p-3.5 rounded-xl text-left w-full
-				transition-all duration-200
-				border
-				${
-					isSelected
-						? "bg-white border-neutral-200 shadow-sm"
-						: "bg-neutral-50 border-transparent hover:bg-white hover:border-neutral-100"
-				}
-				${!isAvailable ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
-			`}
-		>
-			<div className="mb-3">
-				<MiniGrid colors={colors} isSelected={isSelected} />
-			</div>
-
-			<div className="flex items-center justify-between gap-2">
-				<div className="min-w-0">
-					<p
-						className={`text-sm font-medium ${
-							isSelected ? "text-neutral-900" : "text-neutral-600"
-						}`}
-					>
-						{label}
-					</p>
-					<p className="text-[11px] text-neutral-400 mt-0.5">{description}</p>
-				</div>
-
-				{isSelected && (
-					<div
-						className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
-						style={{ backgroundColor: colors[2] }}
-					>
-						<svg
-							className="w-2.5 h-2.5 text-white"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							strokeWidth={3}
-							aria-hidden="true"
-						>
-							<title>Selected</title>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M5 13l4 4L19 7"
-							/>
-						</svg>
-					</div>
-				)}
-
-				{!isAvailable && (
-					<span className="text-[10px] font-medium text-neutral-400 bg-neutral-100 px-1.5 py-0.5 rounded shrink-0">
-						Soon
-					</span>
-				)}
-			</div>
-		</button>
-	);
-}
 
 interface ThemeSelectProps {
 	theme: Theme;
@@ -154,18 +34,96 @@ const THEMES = [
 ];
 
 export function ThemeSelect({ theme, setTheme }: ThemeSelectProps) {
+	const navRef = useRef<HTMLDivElement>(null);
+	const buttonRefs = useRef<Map<Theme, HTMLButtonElement>>(new Map());
+	const [indicator, setIndicator] = useState<{
+		top: number;
+		left: number;
+		width: number;
+		height: number;
+	} | null>(null);
+
+	const updateIndicator = useCallback(() => {
+		const nav = navRef.current;
+		const button = buttonRefs.current.get(theme);
+		if (!nav || !button) return;
+
+		const navRect = nav.getBoundingClientRect();
+		const btnRect = button.getBoundingClientRect();
+
+		setIndicator({
+			top: btnRect.top - navRect.top,
+			left: btnRect.left - navRect.left,
+			width: btnRect.width,
+			height: btnRect.height,
+		});
+	}, [theme]);
+
+	useEffect(() => {
+		updateIndicator();
+	}, [updateIndicator]);
+
+	useEffect(() => {
+		const nav = navRef.current;
+		if (!nav) return;
+
+		const observer = new ResizeObserver(() => {
+			updateIndicator();
+		});
+		observer.observe(nav);
+
+		return () => observer.disconnect();
+	}, [updateIndicator]);
+
 	return (
-		<div className="grid grid-cols-3 gap-2">
-			{THEMES.map((t) => (
-				<ThemeCard
-					key={t.id}
-					{...t}
-					isSelected={theme === t.id}
-					isAvailable={t.available}
-					onClick={() => t.available && setTheme(t.id)}
+		// biome-ignore lint/a11y/useSemanticElements: <explanation>
+		<nav
+			ref={navRef}
+			role="listitem"
+			className="relative flex flex-row gap-1 mb-4 lg:absolute lg:right-full lg:top-0 lg:flex-col lg:mr-6 lg:mb-0"
+		>
+			{indicator && (
+				<div
+					className="absolute bg-neutral-900 rounded-lg z-0"
+					style={{
+						top: indicator.top,
+						left: indicator.left,
+						width: indicator.width,
+						height: indicator.height,
+						transition:
+							"top 0.4s var(--ease-spring), left 0.4s var(--ease-spring), width 0.3s var(--ease-spring), height 0.3s var(--ease-spring)",
+					}}
 				/>
+			)}
+
+			{THEMES.map((t) => (
+				<button
+					key={t.id}
+					ref={(el) => {
+						if (el) buttonRefs.current.set(t.id, el);
+					}}
+					type="button"
+					role="tab"
+					aria-selected={theme === t.id}
+					disabled={!t.available}
+					onClick={() => t.available && setTheme(t.id)}
+					className={`
+						relative z-10 px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap
+						transition-colors duration-200
+						flex items-center gap-2
+						${theme === t.id ? "text-white" : "text-neutral-400 hover:text-neutral-600"}
+						${!t.available ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+					`}
+				>
+					{t.label}
+					{!t.available && (
+						<span className="text-[10px] font-medium bg-neutral-100 text-neutral-400 px-1.5 py-0.5 rounded">
+							Soon
+						</span>
+					)}
+				</button>
 			))}
-		</div>
+		</nav>
 	);
 }
 
