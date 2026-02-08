@@ -7,17 +7,17 @@
 - [한국어](./docs/README-ko.md)
 - [git-style.vercel.app](https://git-style.vercel.app)
 
+<br />
+
+> Turn your GitHub contributions into beautiful visuals. Style your commits your way.
+
+![Git Style](https://git-style.vercel.app/api/anonymousRecords/animation?flower=default&color=%23fbbf24)
+
 ## Usage
 
 1. Pick a theme and style.
 2. Enter your GitHub username.
 3. Paste the generated markdown into your `README.md`.
-
-<br />
-
-```md
-![Git Style](https://git-style.vercel.app/api/anonymousRecords/animation?flower=default&color=%23fbbf24)
-```
 
 ## Themes
 
