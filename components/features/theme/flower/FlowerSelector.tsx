@@ -1,5 +1,7 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 import type { FlowerType } from "@/lib/themes/types";
 import { FlowerPreview } from "./FlowerPreview";
 
@@ -32,6 +34,8 @@ export function FlowerSelector({
 	flowerColor,
 	setFlowerColor,
 }: FlowerSelectorProps) {
+	const [hoveredFlower, setHoveredFlower] = useState<FlowerType | null>(null);
+
 	return (
 		<div className="flex flex-col sm:flex-row gap-5 items-start">
 			<div className="flex-1 space-y-5 w-full sm:w-auto">
@@ -45,14 +49,48 @@ export function FlowerSelector({
 								type="button"
 								key={option.type}
 								onClick={() => setFlowerType(option.type)}
+								onMouseEnter={() => setHoveredFlower(option.type)}
+								onMouseLeave={() => setHoveredFlower(null)}
 								aria-pressed={flowerType === option.type}
-								className={`px-3 py-1.5 rounded-md text-sm transition-colors duration-150 ${
-									flowerType === option.type
-										? "bg-white text-neutral-900 shadow-sm border border-neutral-200"
-										: "text-neutral-600 hover:text-neutral-900 hover:bg-white/60"
-								}`}
+								className="relative px-3 py-1.5 rounded-md text-sm"
 							>
-								{option.label}
+								<AnimatePresence>
+									{hoveredFlower === option.type &&
+										hoveredFlower !== flowerType && (
+											<motion.span
+												className="absolute inset-0 rounded-md bg-neutral-100"
+												layoutId="flower-hover"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
+												transition={{
+													type: "spring",
+													bounce: 0.15,
+													duration: 0.3,
+												}}
+											/>
+										)}
+								</AnimatePresence>
+								{flowerType === option.type && (
+									<motion.span
+										className="absolute inset-0 rounded-md bg-white shadow-sm border border-neutral-200"
+										layoutId="flower-active"
+										transition={{
+											type: "spring",
+											bounce: 0.15,
+											duration: 0.4,
+										}}
+									/>
+								)}
+								<span
+									className={`relative z-10 ${
+										flowerType === option.type
+											? "text-neutral-900"
+											: "text-neutral-600"
+									}`}
+								>
+									{option.label}
+								</span>
 							</button>
 						))}
 					</div>
@@ -72,11 +110,23 @@ export function FlowerSelector({
 								aria-label={`Select ${preset.label} color`}
 								aria-pressed={flowerColor === preset.color}
 							>
+								{flowerColor === preset.color && (
+									<motion.div
+										className="absolute -inset-[3px] rounded-full"
+										style={{
+											boxShadow: `0 0 0 2px ${flowerColor === "#ffffff" ? "#a3a3a3" : flowerColor}`,
+										}}
+										layoutId="flower-color-active"
+										transition={{
+											type: "spring",
+											bounce: 0.15,
+											duration: 0.4,
+										}}
+									/>
+								)}
 								<div
 									className={`w-7 h-7 rounded-full transition-transform duration-150 ${
-										flowerColor === preset.color
-											? "ring-2 ring-neutral-900 ring-offset-2"
-											: "hover:scale-110"
+										flowerColor !== preset.color ? "hover:scale-110" : ""
 									}`}
 									style={{
 										backgroundColor: preset.color,
