@@ -1,93 +1,100 @@
-# Contributing to Git Style
+## Contributing to Git Style
+Thank you for your interest in contributing to Git Style! This document provides guidelines for contributing to this project.
 
-Git Style에 기여해 주셔서 감사합니다! 이 문서는 프로젝트에 기여하는 방법을 안내합니다.
-
-## 개발 환경 설정
-
-1. 저장소 Fork 및 Clone
-
+## Development Environment Setup
+1. **Fork and Clone the Repository**
 ```bash
 git clone https://github.com/YOUR_USERNAME/git-style.git
+
 cd git-style
 ```
 
-2. 의존성 설치
-
+2. **Install Dependencies**
 ```bash
 pnpm install
 ```
 
-3. 개발 서버 실행
+3. **Run Development Server**
 
 ```bash
 pnpm dev
 ```
 
-4. http://localhost:3000 에서 확인
+4. **Access the local server at http://localhost:3000**
 
-## 기여 방법
+## How to Contribute
+### Bug Reports
+- Check existing issues on the [Issues](https://github.com/anonymousRecords/git-style/issues) page.
 
-### 버그 리포트
+- Use the Bug Report template when creating a new issue.
 
-- [Issues](https://github.com/anonymousRecords/git-style/issues)에서 기존 이슈 확인
-- 새 이슈 생성 시 버그 리포트 템플릿 사용
-- 재현 가능한 단계와 환경 정보 포함
+- Include reproducible steps and environment information.
 
-### 기능 제안
+### Feature Suggestions
+- Use the Feature Request template in the Issues tab.
 
-- Issue에서 기능 요청 템플릿 사용
-- 기능의 목적과 예상 동작 설명
+- Describe the purpose of the feature and its expected behavior.
 
-### Pull Request
-
-1. `main` 브랜치에서 새 브랜치 생성
+### Pull Requests
+1. **Create a new branch from the main branch**
 
 ```bash
 git checkout -b feature/your-feature-name
 ```
 
-2. 코드 작성 및 린트 확인
+2. **Write code and check linting**
 
 ```bash
 pnpm lint
 ```
 
-3. 커밋 메시지 규칙
+3. **Commit Message Rules**
 
-```
-feat: 새로운 기능 추가
-fix: 버그 수정
-docs: 문서 수정
-style: 코드 포맷팅
-refactor: 리팩토링
-test: 테스트 추가
-chore: 빌드, 설정 변경
-```
+- `feat`: Add a new feature
 
-4. Push 및 PR 생성
+- `fix`: Bug fix
+
+- `docs`: Documentation changes
+
+- `style`: Code formatting
+
+- `refactor`: Code restructuring
+
+- `test`: Adding tests
+
+- `chore`: Build process or configuration changes
+
+4. **Push and Create a PR**
 
 ```bash
 git push origin feature/your-feature-name
 ```
 
-## 새 테마 추가하기
+## Adding New Themes
+Themes are the core feature of Git Style. To add a new theme:
 
-Git Style의 핵심 기능은 테마입니다. 새 테마를 추가하려면:
+1. Create a new folder in the `/lib/themes/` directory.
 
-1. `/lib/themes/` 디렉토리에 새 폴더 생성
-2. 다음 파일 구현:
-   - `server-render.ts` - SVG 렌더링 로직
-   - `client-preview.ts` - 클라이언트 미리보기
-   - `index.ts` - export
-3. `/lib/themes/index.ts`에 테마 등록
-4. `/components/theme-selector/`에 선택 UI 추가
+2. Implement the following files
 
-## 코드 스타일
+- `constants.ts`: Color, size, and other constants
 
-- TypeScript strict 모드 준수
-- Biome 린터/포맷터 사용
-- 컴포넌트는 함수형으로 작성
+- `renderer.ts`: Canvas rendering logic
 
-## 질문이 있으신가요?
+- `client-preview.ts`: Client-side preview
 
-Issue를 생성하거나 [Discussion](https://github.com/anonymousRecords/git-style/discussions)에서 질문해 주세요.
+- `generator.ts`: APNG generation logic
+
+3. Register the theme in `/lib/themes/config.ts`.
+
+4. Add the selection UI to `/components/features/theme/`.
+
+## Code Style
+- Strictly follow TypeScript strict mode.
+
+- Use Biome for linting and formatting.
+
+- Write components as Functional Components.
+
+## Questions?
+If you have any questions, feel free to create an Issue or start a thread in the [Discussion](https://github.com/anonymousRecords/git-style/discussions).
