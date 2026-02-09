@@ -82,9 +82,7 @@ export function FlowerPreview({
 				style={{
 					width: size,
 					height: size,
-					background: isUprooted
-						? "linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%)"
-						: "linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)",
+					background: getBackgroundColor(isUprooted, flowerColor),
 					cursor: isDragging ? "grabbing" : "grab",
 				}}
 				onPointerDown={handlePointerDown}
@@ -144,4 +142,15 @@ export function FlowerPreview({
 				)}
 		</>
 	);
+}
+
+function getBackgroundColor(isUprooted: boolean, flowerColor: string) {
+	if (isUprooted) {
+		return "linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%)";
+	} else {
+		if (flowerColor === "#ffffff") {
+			return "#f2f2f2";
+		}
+		return "linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)";
+	}
 }
