@@ -1,14 +1,14 @@
 import type { Canvas, SKRSContext2D } from "@napi-rs/canvas";
 import { adjustBrightness } from "@/lib/utils/color";
 import type { CommitLevel } from "@/lib/utils/commit-level";
-import type { FlowerType, PlantElement, WindEffect } from "../types";
-import { CELL_SIZE, OFFSET_X, OFFSET_Y, PLANT_COLORS } from "./constants";
+import type { FlowerElement, FlowerType, WindEffect } from "../types";
+import { CELL_SIZE, FLOWER_COLORS, OFFSET_X, OFFSET_Y } from "./constants";
 
-export function createPlantElements(
+export function createFlowerElements(
 	weeks: { count: number }[][],
 	getCommitLevel: (count: number) => CommitLevel,
-): PlantElement[] {
-	const elements: PlantElement[] = [];
+): FlowerElement[] {
+	const elements: FlowerElement[] = [];
 
 	weeks.forEach((week, weekIndex) => {
 		week.forEach((day, dayIndex) => {
@@ -26,10 +26,10 @@ export function createPlantElements(
 	return elements;
 }
 
-interface RenderPlantFrameProps {
+interface RenderFlowerFrameProps {
 	canvas: Canvas;
 	ctx: SKRSContext2D;
-	elements: PlantElement[];
+	elements: FlowerElement[];
 	frameIndex: number;
 	totalFrames: number;
 	windEffect: WindEffect;
@@ -38,7 +38,7 @@ interface RenderPlantFrameProps {
 	flowerColor?: string;
 }
 
-export function renderPlantFrame({
+export function renderFlowerFrame({
 	canvas,
 	ctx,
 	elements,
@@ -48,7 +48,7 @@ export function renderPlantFrame({
 	username,
 	flowerType = "default",
 	flowerColor,
-}: RenderPlantFrameProps): void {
+}: RenderFlowerFrameProps): void {
 	const width = canvas.width;
 	const height = canvas.height;
 
@@ -57,12 +57,12 @@ export function renderPlantFrame({
 	// Title
 	ctx.fillStyle = "#ffffff";
 	ctx.font = "16px sans-serif";
-	ctx.fillText(`${username}'s Plant`, OFFSET_X, 30);
+	ctx.fillText(`${username}'s Flower`, OFFSET_X, 30);
 
 	// Animation progress (0 ~ 1)
 	const progress = frameIndex / totalFrames;
 
-	// Plant
+	// Flower
 	elements.forEach((element) => {
 		if (element.level === "none") {
 			ctx.fillStyle = "#9ca3af";
@@ -77,7 +77,7 @@ export function renderPlantFrame({
 			Math.sin((progress + phaseOffset) * Math.PI * 2 * windEffect.frequency) *
 			windEffect.amplitude;
 
-		drawPlant(
+		drawFlowerStem(
 			ctx,
 			element.x,
 			element.y,
@@ -95,7 +95,7 @@ function drawSoilBackground(
 	height: number,
 ): void {
 	// Soil color
-	ctx.fillStyle = PLANT_COLORS.soil;
+	ctx.fillStyle = FLOWER_COLORS.soil;
 	ctx.fillRect(0, 0, width, height);
 
 	// Soil texture
@@ -158,7 +158,7 @@ function drawEllipse(
 	ctx.fill();
 }
 
-function drawPlant(
+function drawFlowerStem(
 	ctx: SKRSContext2D,
 	x: number,
 	y: number,
@@ -196,7 +196,7 @@ function drawSprout(ctx: SKRSContext2D, windRadians: number): void {
 	ctx.save();
 	ctx.rotate(windRadians * 0.5);
 
-	ctx.strokeStyle = PLANT_COLORS.stem.light;
+	ctx.strokeStyle = FLOWER_COLORS.stem.light;
 	ctx.lineWidth = 2;
 	ctx.lineCap = "round";
 
@@ -216,7 +216,7 @@ function drawSeedling(ctx: SKRSContext2D, windRadians: number): void {
 		{ angle: 0.3, height: 10, curve: 2 },
 	];
 
-	ctx.strokeStyle = PLANT_COLORS.stem.light;
+	ctx.strokeStyle = FLOWER_COLORS.stem.light;
 	ctx.lineWidth = 2;
 	ctx.lineCap = "round";
 
@@ -251,7 +251,7 @@ function drawGrass(ctx: SKRSContext2D, windRadians: number): void {
 		ctx.rotate(stem.angle + windRadians * 0.9);
 
 		ctx.strokeStyle =
-			i === 2 ? PLANT_COLORS.stem.dark : PLANT_COLORS.stem.light;
+			i === 2 ? FLOWER_COLORS.stem.dark : FLOWER_COLORS.stem.light;
 
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
@@ -288,8 +288,8 @@ function drawFlower(
 		ctx.rotate(stem.angle + windRadians);
 
 		ctx.strokeStyle = stem.isFlowerStem
-			? PLANT_COLORS.stem.dark
-			: PLANT_COLORS.stem.light;
+			? FLOWER_COLORS.stem.dark
+			: FLOWER_COLORS.stem.light;
 
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
@@ -329,7 +329,7 @@ function drawFlower(
 
 // Default flower
 function drawDefaultFlowerHead(ctx: SKRSContext2D, color?: string): void {
-	const petalColor = color || PLANT_COLORS.flower;
+	const petalColor = color || FLOWER_COLORS.flower;
 	ctx.fillStyle = petalColor;
 	const petalCount = 5;
 	const petalRadius = 3;

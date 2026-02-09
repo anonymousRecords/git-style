@@ -5,27 +5,27 @@ import { getCommitLevel } from "@/lib/utils/commit-level";
 import type { AnimationConfig, FlowerType, WindEffect } from "../types";
 import { QUALITY_PRESETS } from "../types";
 import {
-	createPlantElements,
+	createFlowerElements,
 	getCanvasDimensions,
-	renderPlantFrame,
+	renderFlowerFrame,
 } from "./renderer";
 
 const cache = new Map<string, { data: Uint8Array; timestamp: number }>();
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
-interface GeneratePlantAPNGOptions {
+interface GenerateFlowerAPNGOptions {
 	username: string;
 	quality?: AnimationConfig["quality"];
 	flowerType?: FlowerType;
 	flowerColor?: string;
 }
 
-export async function generatePlantAPNG(
-	options: GeneratePlantAPNGOptions | string,
+export async function generateFlowerAPNG(
+	options: GenerateFlowerAPNGOptions | string,
 	quality: AnimationConfig["quality"] = "low",
 ): Promise<Uint8Array> {
 	// Support both old signature (username, quality) and new options object
-	const opts: GeneratePlantAPNGOptions =
+	const opts: GenerateFlowerAPNGOptions =
 		typeof options === "string" ? { username: options, quality } : options;
 
 	const {
@@ -53,10 +53,10 @@ export async function generatePlantAPNG(
 		const canvas = createCanvas(width, height);
 		const ctx = canvas.getContext("2d");
 
-		renderPlantFrame({
+		renderFlowerFrame({
 			canvas,
 			ctx,
-			elements: createPlantElements(weeks, getCommitLevel),
+			elements: createFlowerElements(weeks, getCommitLevel),
 			frameIndex: i,
 			totalFrames: frameCount,
 			windEffect: getWindEffect(width),

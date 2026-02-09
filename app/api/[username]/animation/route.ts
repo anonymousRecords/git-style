@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { generatePlantAPNG } from "@/lib/themes/plant/generator";
+import { generateFlowerAPNG } from "@/lib/themes/flower/generator";
 import type { FlowerType } from "@/lib/themes/types";
 
 const VALID_FLOWER_TYPES: FlowerType[] = [
@@ -39,7 +39,7 @@ export async function GET(
 		: undefined;
 
 	try {
-		const apngData = await generatePlantAPNG({
+		const apngData = await generateFlowerAPNG({
 			username,
 			quality: "low",
 			flowerType,

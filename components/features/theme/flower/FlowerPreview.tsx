@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-import { drawFlowerPreview } from "@/lib/themes/plant/client-preview";
+import { drawFlowerPreview } from "@/lib/themes/flower/client-preview";
 import type { FlowerType } from "@/lib/themes/types";
 
 import { DraggedFlower } from "./DraggedFlower";

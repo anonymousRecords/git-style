@@ -18,7 +18,7 @@ export default function PreviewCard({
 	const colorParam = flowerColor
 		? `&color=${encodeURIComponent(flowerColor)}`
 		: "";
-	const animationUrl = `/api/${username}/animation?theme=plant&quality=low&flower=${flowerType}${colorParam}`;
+	const animationUrl = `/api/${username}/animation?theme=flower&quality=low&flower=${flowerType}${colorParam}`;
 	const markdown = `![GitStyle](https://git-style.vercel.app${animationUrl})`;
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);

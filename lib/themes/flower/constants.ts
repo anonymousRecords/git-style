@@ -1,4 +1,4 @@
-export const PLANT_COLORS = {
+export const FLOWER_COLORS = {
 	stem: {
 		light: "#22c55e",
 		dark: "#15803d",

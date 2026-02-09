@@ -52,8 +52,8 @@ export const FireTheme: ThemeStyle = {
 	},
 };
 
-export const PlantTheme: ThemeStyle = {
-	label: "Plant",
+export const FlowerTheme: ThemeStyle = {
+	label: "Flower",
 	emoji: "🌿",
 	background: "#f0fdf4",
 	backgroundPattern: `
@@ -92,5 +92,5 @@ export const PlantTheme: ThemeStyle = {
 export const themes: Record<string, ThemeStyle> = {
 	hair: HairTheme,
 	fire: FireTheme,
-	plant: PlantTheme,
+	flower: FlowerTheme,
 };

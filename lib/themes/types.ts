@@ -10,7 +10,7 @@ export interface AnimationConfig {
 	quality: "low" | "medium" | "high";
 }
 
-export interface PlantElement {
+export interface FlowerElement {
 	x: number;
 	y: number;
 	level: CommitLevel;
