@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+import { usePostHog } from "posthog-js/react";
 import type { FlowerType } from "@/lib/themes/types";
 import { FlowerPreview } from "./FlowerPreview";
 
@@ -34,6 +35,7 @@ export function FlowerSelector({
 	flowerColor,
 	setFlowerColor,
 }: FlowerSelectorProps) {
+	const posthog = usePostHog();
 	const [hoveredFlower, setHoveredFlower] = useState<FlowerType | null>(null);
 
 	return (
@@ -48,7 +50,12 @@ export function FlowerSelector({
 							<button
 								type="button"
 								key={option.type}
-								onClick={() => setFlowerType(option.type)}
+								onClick={() => {
+									posthog?.capture("flower_type_selected", {
+										flower_type: option.type,
+									});
+									setFlowerType(option.type);
+								}}
 								onMouseEnter={() => setHoveredFlower(option.type)}
 								onMouseLeave={() => setHoveredFlower(null)}
 								aria-pressed={flowerType === option.type}
@@ -105,7 +112,13 @@ export function FlowerSelector({
 							<button
 								type="button"
 								key={preset.color}
-								onClick={() => setFlowerColor(preset.color)}
+								onClick={() => {
+									posthog?.capture("flower_color_selected", {
+										flower_color: preset.color,
+										flower_color_label: preset.label,
+									});
+									setFlowerColor(preset.color);
+								}}
 								className="group relative"
 								aria-label={`Select ${preset.label} color`}
 								aria-pressed={flowerColor === preset.color}

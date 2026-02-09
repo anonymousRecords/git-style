@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { usePostHog } from "posthog-js/react";
 import type { FlowerType } from "@/lib/themes/types";
 
 interface PreviewCardProps {
@@ -85,9 +86,11 @@ interface MarkdownSnippetProps {
 }
 
 function MarkdownSnippet({ markdown }: MarkdownSnippetProps) {
+	const posthog = usePostHog();
 	const [copied, setCopied] = useState<boolean>(false);
 
 	const handleCopy = async () => {
+		posthog?.capture("markdown_copied");
 		await navigator.clipboard.writeText(markdown);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);

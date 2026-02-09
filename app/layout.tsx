@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { PostHogProvider } from "./providers";
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -22,19 +23,21 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`min-h-screen bg-white ${inter.variable}`}>
-				<div className="flex justify-center">
-					<div className="w-full max-w-[540px] min-h-screen px-5 sm:px-8">
-						<main className="pb-16">{children}</main>
+				<PostHogProvider>
+					<div className="flex justify-center">
+						<div className="w-full max-w-[540px] min-h-screen px-5 sm:px-8">
+							<main className="pb-16">{children}</main>
 
-						<footer className="py-8 border-t border-neutral-100">
-							<p className="text-xs text-neutral-400 text-center">
-								<Link href="https://github.com/anonymousRecords/git-style">
-									Made by anonymousRecords @GitHub
-								</Link>
-							</p>
-						</footer>
+							<footer className="py-8 border-t border-neutral-100">
+								<p className="text-xs text-neutral-400 text-center">
+									<Link href="https://github.com/anonymousRecords/git-style">
+										Made by anonymousRecords @GitHub
+									</Link>
+								</p>
+							</footer>
+						</div>
 					</div>
-				</div>
+				</PostHogProvider>
 			</body>
 		</html>
 	);

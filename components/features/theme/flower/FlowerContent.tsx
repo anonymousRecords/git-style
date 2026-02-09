@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePostHog } from "posthog-js/react";
 import { UserNameInput } from "@/components/features/user/UserInput";
 import PreviewCard from "@/components/ui/PreviewCard";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -8,6 +9,7 @@ import type { FlowerType } from "@/lib/themes/types";
 import { FlowerSelector } from "./FlowerSelector";
 
 export function FlowerContent() {
+	const posthog = usePostHog();
 	const [username, setUsername] = useState("");
 	const [submitted, setSubmitted] = useState(false);
 	const [flowerType, setFlowerType] = useState<FlowerType>("default");
@@ -16,6 +18,10 @@ export function FlowerContent() {
 
 	const handleSubmit = () => {
 		if (!username) return;
+		posthog?.capture("generate_clicked", {
+			flower_type: flowerType,
+			flower_color: flowerColor,
+		});
 		setIsGenerating(true);
 		setSubmitted(true);
 		setTimeout(() => setIsGenerating(false), 1000);

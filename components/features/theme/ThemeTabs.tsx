@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePostHog } from "posthog-js/react";
 
 type Theme = "flower" | "cloud" | "hair";
 
@@ -34,6 +35,7 @@ const THEMES = [
 ];
 
 export function ThemeSelect({ theme, setTheme }: ThemeSelectProps) {
+	const posthog = usePostHog();
 	const navRef = useRef<HTMLDivElement>(null);
 	const buttonRefs = useRef<Map<Theme, HTMLButtonElement>>(new Map());
 	const [indicator, setIndicator] = useState<{
@@ -106,7 +108,11 @@ export function ThemeSelect({ theme, setTheme }: ThemeSelectProps) {
 					role="tab"
 					aria-selected={theme === t.id}
 					disabled={!t.available}
-					onClick={() => t.available && setTheme(t.id)}
+					onClick={() => {
+						if (!t.available) return;
+						posthog?.capture("theme_selected", { theme: t.id });
+						setTheme(t.id);
+					}}
 					className={`
 						relative z-10 px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap
 						transition-colors duration-200
