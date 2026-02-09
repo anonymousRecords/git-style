@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import { usePostHog } from "posthog-js/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Theme = "flower" | "cloud" | "hair";
 
@@ -78,7 +78,7 @@ export function ThemeSelect({ theme, setTheme }: ThemeSelectProps) {
 	}, [updateIndicator]);
 
 	return (
-		// biome-ignore lint/a11y/useSemanticElements: <explanation>
+		// biome-ignore lint/a11y/useSemanticElements: listitem
 		<nav
 			ref={navRef}
 			role="listitem"

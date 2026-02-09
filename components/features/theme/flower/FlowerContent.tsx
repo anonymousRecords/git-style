@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { usePostHog } from "posthog-js/react";
+import { useState } from "react";
 import { UserNameInput } from "@/components/features/user/UserInput";
 import PreviewCard from "@/components/ui/PreviewCard";
 import { SectionLabel } from "@/components/ui/SectionLabel";
