@@ -28,7 +28,7 @@ export default function RootLayout({
 
 						<footer className="py-8 border-t border-neutral-100">
 							<p className="text-xs text-neutral-400 text-center">
-								<Link href="https://github.com/https://github.com/anonymousRecords/git-style">
+								<Link href="https://github.com/anonymousRecords/git-style">
 									Made by anonymousRecords @GitHub
 								</Link>
 							</p>
