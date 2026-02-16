@@ -2,6 +2,9 @@ import type { CommitLevel } from "@/lib/utils/commit-level";
 
 export type FlowerType = "default" | "tulip" | "sunflower" | "cherry";
 
+export type HairCurliness = "straight" | "wavy" | "curly";
+export type HairColor = string;
+
 export interface AnimationConfig {
 	frameCount: number;
 	frameDelay: number; // milliseconds

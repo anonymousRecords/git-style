@@ -19,17 +19,17 @@ const THEMES = [
 		available: true,
 	},
 	{
-		id: "cloud" as Theme,
-		label: "Cloud",
-		description: "Floating sky",
-		colors: ["#e0f2fe", "#7dd3fc", "#0ea5e9", "#0369a1"],
-		available: false,
-	},
-	{
 		id: "hair" as Theme,
 		label: "Hair",
 		description: "Growing strands",
 		colors: ["#fef3c7", "#fcd34d", "#f59e0b", "#b45309"],
+		available: true,
+	},
+	{
+		id: "cloud" as Theme,
+		label: "Cloud",
+		description: "Floating sky",
+		colors: ["#e0f2fe", "#7dd3fc", "#0ea5e9", "#0369a1"],
 		available: false,
 	},
 ];
