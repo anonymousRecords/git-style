@@ -3,23 +3,43 @@
 import Image from "next/image";
 import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
-import type { FlowerType } from "@/lib/themes/types";
+import type { FlowerType, HairCurliness } from "@/lib/themes/types";
 
 interface PreviewCardProps {
 	username: string;
 	flowerType?: FlowerType;
 	flowerColor?: string;
+	hairColor?: string;
+	curliness?: HairCurliness;
 }
 
 export default function PreviewCard({
 	username,
-	flowerType = "default",
+	flowerType,
 	flowerColor,
+	hairColor,
+	curliness,
 }: PreviewCardProps) {
-	const colorParam = flowerColor
-		? `&color=${encodeURIComponent(flowerColor)}`
-		: "";
-	const animationUrl = `/api/${username}/animation?theme=flower&quality=low&flower=${flowerType}${colorParam}`;
+	const isHairTheme = hairColor !== undefined || curliness !== undefined;
+	const theme = isHairTheme ? "hair" : "flower";
+
+	let params = `theme=${theme}&quality=low`;
+
+	if (theme === "flower") {
+		params += `&flower=${flowerType || "default"}`;
+		if (flowerColor) {
+			params += `&color=${encodeURIComponent(flowerColor)}`;
+		}
+	} else if (theme === "hair") {
+		if (hairColor) {
+			params += `&color=${encodeURIComponent(hairColor)}`;
+		}
+		if (curliness) {
+			params += `&curliness=${curliness}`;
+		}
+	}
+
+	const animationUrl = `/api/${username}/animation?${params}`;
 	const markdown = `![GitStyle](https://git-style.vercel.app${animationUrl})`;
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
