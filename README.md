@@ -11,8 +11,6 @@
 
 > Turn your GitHub contributions into beautiful visuals. Style your commits your way.
 
-![Git Style](https://git-style.vercel.app/api/anonymousRecords/animation?flower=default&color=%23fbbf24)
-
 ## Usage
 
 1. Pick a theme and style.
@@ -24,10 +22,12 @@
 | Theme | Status |
 |-------|--------|
 | Flower | Available |
+| Hair | Available |
 | Cloud | Soon |
-| Hair | Soon |
 
 ### Flower
+
+![Git Style](https://git-style.vercel.app/api/anonymousRecords/animation?flower=default&color=%23fbbf24)
 
 Customize flower type and color.
 
@@ -39,6 +39,21 @@ Customize flower type and color.
 |-------|-------------|---------|
 | `flower` | Flower type | `default` |
 | `color` | HEX color code | `#fbbf24` |
+
+### Hair
+
+![GitStyle](https://git-style.vercel.app/api/anonymousRecords/animation?theme=hair&quality=low&color=%233d2817&curliness=straight)
+
+Customize hair color and curliness.
+
+**Curliness**: `straight`, `wavy`, `curly`
+
+**Query Parameters**
+
+| Param | Description | Default |
+|-------|-------------|---------|
+| `color` | HEX color code | `#3d2817` |
+| `curliness` | Hair curliness | `straight` |
 
 ## Development
 

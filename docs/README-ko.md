@@ -11,7 +11,6 @@
 
 > GitHub 커밋 기록을 아름답게 꾸며보세요. 당신만의 스타일로 커밋을 표현하세요.
 
-![Git Style](https://git-style.vercel.app/api/anonymousRecords/animation?flower=default&color=%23fbbf24)
 
 ## Usage
 
@@ -25,10 +24,12 @@
 | Theme | Status |
 |-------|--------|
 | Flower | Available |
+| Hair | Available |
 | Cloud | Soon |
-| Hair | Soon |
 
 ### Flower
+
+![Git Style](https://git-style.vercel.app/api/anonymousRecords/animation?flower=default&color=%23fbbf24)
 
 꽃 종류와 색상을 커스터마이징할 수 있습니다.
 
@@ -40,6 +41,21 @@
 |-------|-------------|---------|
 | `flower` | 꽃 종류 | `default` |
 | `color` | HEX 색상 코드 | `#fbbf24` |
+
+### Hair
+
+![GitStyle](https://git-style.vercel.app/api/anonymousRecords/animation?theme=hair&quality=low&color=%233d2817&curliness=straight)
+
+머리카락 색상과 곱슬거림을 커스터마이징할 수 있습니다.
+
+**곱슬거림**: `straight`(직모), `wavy`(웨이브), `curly`(곱슬)
+
+**Query Parameters**
+
+| Param | Description | Default |
+|-------|-------------|---------|
+| `color` | HEX 색상 코드 | `#3d2817` |
+| `curliness` | 머리카락 곱슬거림 | `straight` |
 
 ## Development
 
