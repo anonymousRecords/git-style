@@ -4,6 +4,7 @@ import Image from "next/image";
 import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import type { FlowerType, HairCurliness } from "@/lib/themes/types";
+import { buildAnimationPath, buildMarkdown } from "@/lib/utils/markdown";
 
 interface PreviewCardProps {
 	username: string;
@@ -20,27 +21,20 @@ export default function PreviewCard({
 	hairColor,
 	curliness,
 }: PreviewCardProps) {
-	const isHairTheme = hairColor !== undefined || curliness !== undefined;
-	const theme = isHairTheme ? "hair" : "flower";
-
-	let params = `theme=${theme}&quality=low`;
-
-	if (theme === "flower") {
-		params += `&flower=${flowerType || "default"}`;
-		if (flowerColor) {
-			params += `&color=${encodeURIComponent(flowerColor)}`;
-		}
-	} else if (theme === "hair") {
-		if (hairColor) {
-			params += `&color=${encodeURIComponent(hairColor)}`;
-		}
-		if (curliness) {
-			params += `&curliness=${curliness}`;
-		}
-	}
-
-	const animationUrl = `/api/${username}/animation?${params}`;
-	const markdown = `![GitStyle](https://git-style.vercel.app${animationUrl})`;
+	const animationUrl = buildAnimationPath({
+		username,
+		flowerType,
+		flowerColor,
+		hairColor,
+		curliness,
+	});
+	const markdown = buildMarkdown({
+		username,
+		flowerType,
+		flowerColor,
+		hairColor,
+		curliness,
+	});
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [hasError, setHasError] = useState<boolean>(false);
