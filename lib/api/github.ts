@@ -1,3 +1,12 @@
+/** 요청한 GitHub 사용자가 존재하지 않음. */
+export class UserNotFoundError extends Error {}
+
+/** GitHub API 호출 자체가 실패함 (업스트림 장애). */
+export class GitHubApiError extends Error {}
+
+/** GITHUB_TOKEN 환경변수가 설정되지 않음 (배포 설정 오류). */
+export class MissingTokenError extends Error {}
+
 export interface ContributionDay {
 	date: string;
 	count: number;
@@ -22,7 +31,7 @@ interface ContributionsQueryResponse {
 			};
 		} | null;
 	};
-	errors?: { message: string }[];
+	errors?: { message: string; type?: string }[];
 }
 
 const CONTRIBUTIONS_QUERY = `
@@ -48,7 +57,7 @@ export async function fetchContributions(
 	const token = process.env.GITHUB_TOKEN;
 
 	if (!token) {
-		throw new Error("GITHUB_TOKEN is not configured");
+		throw new MissingTokenError("GITHUB_TOKEN is not configured");
 	}
 
 	const res = await fetch("https://api.github.com/graphql", {
@@ -64,7 +73,7 @@ export async function fetchContributions(
 	});
 
 	if (!res.ok) {
-		throw new Error(
+		throw new GitHubApiError(
 			`Failed to fetch contributions for ${username} (HTTP ${res.status})`,
 		);
 	}
@@ -72,16 +81,20 @@ export async function fetchContributions(
 	const json: ContributionsQueryResponse = await res.json();
 
 	if (json.errors?.length) {
-		throw new Error(
-			`Failed to fetch contributions for ${username}: ${json.errors[0].message}`,
-		);
+		const message = `Failed to fetch contributions for ${username}: ${json.errors[0].message}`;
+
+		if (json.errors.some((error) => error.type === "NOT_FOUND")) {
+			throw new UserNotFoundError(message);
+		}
+
+		throw new GitHubApiError(message);
 	}
 
 	const rawWeeks =
 		json.data?.user?.contributionsCollection?.contributionCalendar?.weeks;
 
 	if (!rawWeeks) {
-		throw new Error(`GitHub user not found: ${username}`);
+		throw new UserNotFoundError(`GitHub user not found: ${username}`);
 	}
 
 	const days: ContributionDay[] = rawWeeks

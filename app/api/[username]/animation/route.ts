@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { GitHubApiError, UserNotFoundError } from "@/lib/api/github";
 import { generateFlowerAPNG } from "@/lib/themes/flower/generator";
 import { generateHairAPNG } from "@/lib/themes/hair/generator";
 import type { FlowerType, HairCurliness } from "@/lib/themes/types";
@@ -102,6 +103,19 @@ export async function GET(
 		});
 	} catch (error) {
 		console.error("[APNG GENERATION ERROR]", error);
+
+		if (error instanceof UserNotFoundError) {
+			return new NextResponse(`GitHub user not found: ${username}`, {
+				status: 404,
+			});
+		}
+
+		if (error instanceof GitHubApiError) {
+			return new NextResponse("Failed to reach the GitHub API", {
+				status: 502,
+			});
+		}
+
 		return new NextResponse("Internal Server Error", { status: 500 });
 	}
 }
