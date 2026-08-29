@@ -6,42 +6,90 @@ export interface ContributionDay {
 interface RawContributionDay {
 	date: string;
 	contributionCount: number;
-	color: string;
-	contributionLevel:
-		| "NONE"
-		| "FIRST_QUARTILE"
-		| "SECOND_QUARTILE"
-		| "THIRD_QUARTILE"
-		| "FOURTH_QUARTILE";
 }
 
-type RawWeek = RawContributionDay[];
-
-interface GitHubContributionsResponse {
-	contributions: RawWeek[];
+interface RawWeek {
+	contributionDays: RawContributionDay[];
 }
+
+interface ContributionsQueryResponse {
+	data?: {
+		user: {
+			contributionsCollection: {
+				contributionCalendar: {
+					weeks: RawWeek[];
+				};
+			};
+		} | null;
+	};
+	errors?: { message: string }[];
+}
+
+const CONTRIBUTIONS_QUERY = `
+	query ($login: String!) {
+		user(login: $login) {
+			contributionsCollection {
+				contributionCalendar {
+					weeks {
+						contributionDays {
+							date
+							contributionCount
+						}
+					}
+				}
+			}
+		}
+	}
+`;
 
 export async function fetchContributions(
 	username: string,
 ): Promise<ContributionDay[]> {
-	const res = await fetch(
-		`https://github-contributions-api.deno.dev/${username}.json`,
-	);
+	const token = process.env.GITHUB_TOKEN;
 
-	if (!res.ok) {
-		throw new Error(`Failed to fetch contributions for ${username}`);
+	if (!token) {
+		throw new Error("GITHUB_TOKEN is not configured");
 	}
 
-	const json: GitHubContributionsResponse = await res.json();
+	const res = await fetch("https://api.github.com/graphql", {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			query: CONTRIBUTIONS_QUERY,
+			variables: { login: username },
+		}),
+	});
 
-	const rawWeeks = json?.contributions || [];
+	if (!res.ok) {
+		throw new Error(
+			`Failed to fetch contributions for ${username} (HTTP ${res.status})`,
+		);
+	}
+
+	const json: ContributionsQueryResponse = await res.json();
+
+	if (json.errors?.length) {
+		throw new Error(
+			`Failed to fetch contributions for ${username}: ${json.errors[0].message}`,
+		);
+	}
+
+	const rawWeeks =
+		json.data?.user?.contributionsCollection?.contributionCalendar?.weeks;
+
+	if (!rawWeeks) {
+		throw new Error(`GitHub user not found: ${username}`);
+	}
 
 	const days: ContributionDay[] = rawWeeks
-		.flat()
+		.flatMap((week) => week.contributionDays)
 		.filter((day) => !!day?.date && typeof day.contributionCount === "number")
 		.map((day) => ({
 			date: day.date,
-			count: day.contributionCount ?? 0,
+			count: day.contributionCount,
 		}));
 
 	return days;
